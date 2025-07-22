@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Data.Models\PowerNutrition.Data.Models.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Data\PowerNutrition.Data.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.GCommon\PowerNutrition.GCommon.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Services.Common\PowerNutrition.Services.Common.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Web.ViewModels\PowerNutrition.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
