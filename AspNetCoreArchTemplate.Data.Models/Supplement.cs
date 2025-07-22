@@ -18,11 +18,13 @@
 
         public double Weight { get; set; }
 
-        public Guid CategoryId { get; set; }
+        public int CategoryId { get; set; }
 
         public virtual Category Category { get; set; } = null!;
 
         public bool IsDeleted { get; set; }
 
+        public virtual ICollection<OrderItem> Orders { get; set; }
+            = new List<OrderItem>();
     }
 }

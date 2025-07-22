@@ -21,6 +21,10 @@
 
         public virtual DbSet<CartItem> CartsItems { get; set; } = null!;
 
+        public virtual DbSet<Order> Orders { get; set; } = null!;
+
+        public virtual DbSet<OrderItem> OrdersItems { get; set; } = null!;
+
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)

@@ -23,5 +23,18 @@
             public const int CategoryNameMinLength = 3;
             public const int CategoryNameMaxLength = 35;
         }
+
+        public static class OrderConstants
+        {
+            public const int OrderAddressMinLength = 10;
+            public const int OrderAddressMaxLength = 150;
+
+            public const int OrderCityMinLength = 3;
+            public const int OrderCityMaxLength = 80;
+
+            public const int OrderPostCodeMinLength = 4;
+            public const int OrderPostCodeMaxLength = 12;
+
+        }
     }
 }

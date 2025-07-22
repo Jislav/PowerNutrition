@@ -12,8 +12,8 @@ using PowerNutrition.Data;
 namespace PowerNutrition.Data.Migrations
 {
     [DbContext(typeof(PowerNutritionDbContext))]
-    [Migration("20250722125628_AddDbSetsAndApplyConfigurations")]
-    partial class AddDbSetsAndApplyConfigurations
+    [Migration("20250722161237_AddOrderAndOrderItemEntity")]
+    partial class AddOrderAndOrderItemEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -276,9 +276,11 @@ namespace PowerNutrition.Data.Migrations
 
             modelBuilder.Entity("PowerNutrition.Data.Models.Category", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -288,6 +290,68 @@ namespace PowerNutrition.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("PowerNutrition.Data.Models.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<string>("PostCode")
+                        .IsRequired()
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("PowerNutrition.Data.Models.OrderItem", b =>
+                {
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SupplementId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "SupplementId");
+
+                    b.HasIndex("SupplementId");
+
+                    b.ToTable("OrdersItems");
                 });
 
             modelBuilder.Entity("PowerNutrition.Data.Models.Supplement", b =>
@@ -301,8 +365,8 @@ namespace PowerNutrition.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -434,6 +498,40 @@ namespace PowerNutrition.Data.Migrations
                     b.Navigation("Supplement");
                 });
 
+            modelBuilder.Entity("PowerNutrition.Data.Models.Order", b =>
+                {
+                    b.HasOne("PowerNutrition.Data.Models.ApplicationUser", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("PowerNutrition.Data.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PowerNutrition.Data.Models.OrderItem", b =>
+                {
+                    b.HasOne("PowerNutrition.Data.Models.Order", "Order")
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PowerNutrition.Data.Models.Supplement", "Supplement")
+                        .WithMany("Orders")
+                        .HasForeignKey("SupplementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Supplement");
+                });
+
             modelBuilder.Entity("PowerNutrition.Data.Models.Supplement", b =>
                 {
                     b.HasOne("PowerNutrition.Data.Models.Category", "Category")
@@ -455,10 +553,22 @@ namespace PowerNutrition.Data.Migrations
                     b.Navigation("Supplements");
                 });
 
+            modelBuilder.Entity("PowerNutrition.Data.Models.Order", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("PowerNutrition.Data.Models.Supplement", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("PowerNutrition.Data.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Cart")
                         .IsRequired();
+
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

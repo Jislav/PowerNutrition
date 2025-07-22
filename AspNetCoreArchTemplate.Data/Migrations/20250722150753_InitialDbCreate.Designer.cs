@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PowerNutrition.Data;
 
@@ -11,9 +12,11 @@ using PowerNutrition.Data;
 namespace PowerNutrition.Data.Migrations
 {
     [DbContext(typeof(PowerNutritionDbContext))]
-    partial class PowerNutritionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250722150753_InitialDbCreate")]
+    partial class InitialDbCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,63 +292,6 @@ namespace PowerNutrition.Data.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("PowerNutrition.Data.Models.Order", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
-
-                    b.Property<string>("PostCode")
-                        .IsRequired()
-                        .HasMaxLength(4)
-                        .HasColumnType("nvarchar(4)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("PowerNutrition.Data.Models.OrderItem", b =>
-                {
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("SupplementId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderId", "SupplementId");
-
-                    b.HasIndex("SupplementId");
-
-                    b.ToTable("OrdersItems");
-                });
-
             modelBuilder.Entity("PowerNutrition.Data.Models.Supplement", b =>
                 {
                     b.Property<Guid>("Id")
@@ -490,36 +436,6 @@ namespace PowerNutrition.Data.Migrations
                     b.Navigation("Supplement");
                 });
 
-            modelBuilder.Entity("PowerNutrition.Data.Models.Order", b =>
-                {
-                    b.HasOne("PowerNutrition.Data.Models.ApplicationUser", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PowerNutrition.Data.Models.OrderItem", b =>
-                {
-                    b.HasOne("PowerNutrition.Data.Models.Order", "Order")
-                        .WithMany("Items")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PowerNutrition.Data.Models.Supplement", "Supplement")
-                        .WithMany("Orders")
-                        .HasForeignKey("SupplementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Supplement");
-                });
-
             modelBuilder.Entity("PowerNutrition.Data.Models.Supplement", b =>
                 {
                     b.HasOne("PowerNutrition.Data.Models.Category", "Category")
@@ -541,22 +457,10 @@ namespace PowerNutrition.Data.Migrations
                     b.Navigation("Supplements");
                 });
 
-            modelBuilder.Entity("PowerNutrition.Data.Models.Order", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("PowerNutrition.Data.Models.Supplement", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
             modelBuilder.Entity("PowerNutrition.Data.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Cart")
                         .IsRequired();
-
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }
