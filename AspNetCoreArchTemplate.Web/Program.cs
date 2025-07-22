@@ -1,9 +1,8 @@
-namespace AspNetCoreArchTemplate.Web
+namespace PowerNutrition.Web
 {
-    using Data;
-
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using PowerNutrition.Data;
 
     public class Program
     {
@@ -14,7 +13,7 @@ namespace AspNetCoreArchTemplate.Web
             string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             
             builder.Services
-                .AddDbContext<ApplicationDbContext>(options =>
+                .AddDbContext<PowerNutritionDbContext>(options =>
                 {
                     options.UseSqlServer(connectionString);
                 });
@@ -24,7 +23,7 @@ namespace AspNetCoreArchTemplate.Web
                 {
                     options.SignIn.RequireConfirmedAccount = true;
                 })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<PowerNutritionDbContext>();
             builder.Services.AddControllersWithViews();
 
             WebApplication? app = builder.Build();
