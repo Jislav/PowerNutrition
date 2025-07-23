@@ -3,6 +3,8 @@ namespace PowerNutrition.Web
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using PowerNutrition.Data;
+    using PowerNutrition.Services.Core;
+    using PowerNutrition.Services.Core.Interfaces;
 
     public class Program
     {
@@ -24,6 +26,9 @@ namespace PowerNutrition.Web
                     options.SignIn.RequireConfirmedAccount = true;
                 })
                 .AddEntityFrameworkStores<PowerNutritionDbContext>();
+
+            builder.Services.AddScoped<ISupplementService, SupplementService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddControllersWithViews();
 
             WebApplication? app = builder.Build();
