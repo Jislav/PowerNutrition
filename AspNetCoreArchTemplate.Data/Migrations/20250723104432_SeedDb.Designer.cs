@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PowerNutrition.Data;
 
@@ -11,9 +12,11 @@ using PowerNutrition.Data;
 namespace PowerNutrition.Data.Migrations
 {
     [DbContext(typeof(PowerNutritionDbContext))]
-    partial class PowerNutritionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250723104432_SeedDb")]
+    partial class SeedDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

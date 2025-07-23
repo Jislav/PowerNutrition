@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using PowerNutrition.Data.Models;
+    using PowerNutrition.Data.Seeding;
     using System.Reflection;
 
     public class PowerNutritionDbContext : IdentityDbContext

@@ -16,6 +16,8 @@ namespace PowerNutrition.Data.Models
 
         public OrderStatus Status { get; set; }
 
+        public string UserId { get; set; } = null!;
+
         public virtual ApplicationUser User { get; set; } = null!;
 
         public ICollection<OrderItem> Items { get; set; }
