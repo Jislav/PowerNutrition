@@ -8,9 +8,10 @@ namespace PowerNutrition.Data.Models
 
         public int PowerPoints { get; set; }
 
-        public virtual Cart Cart { get; set; } = null!;
-
         public virtual ICollection<Order> Orders { get; set; } 
             = new HashSet<Order>();
+
+        public virtual ICollection<CartItem> CartItems { get; set; }
+            = new HashSet<CartItem>();
     }
 }

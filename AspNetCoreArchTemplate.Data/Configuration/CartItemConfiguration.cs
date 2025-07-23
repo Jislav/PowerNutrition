@@ -8,13 +8,13 @@
         public void Configure(EntityTypeBuilder<CartItem> entity)
         {
             entity
-                .HasKey(ci => new { ci.CartId, ci.SupplementId });
+                .HasKey(ci => new { ci.UserId, ci.SupplementId });
 
             entity
-                .HasOne(ci => ci.Cart)
-                .WithMany(c => c.Items)
-                .HasForeignKey(ci => ci.CartId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(ci => ci.User)
+                .WithMany(u => u.CartItems)
+                .HasForeignKey(ci => ci.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             entity
                 .HasOne(ci => ci.Supplement)

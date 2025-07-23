@@ -1,0 +1,26 @@
+﻿@using PowerNutrition.Web.ViewModels.Cart;
+@model IEnumerable<AllCartItemsViewmodel>
+@{
+    ViewData["Title"] = "My Cart";
+}
+@if (Model.Count() <= 0)
+{
+    <h1 style="text-align: center ; font-size: 48px">Your cart is empty!</h1>
+}
+else
+{
+    <div style="display:flex ; flex-direction: row">
+        @foreach (var cartItem in Model)
+        {
+            <div style="width: 100%; display: flex">
+                <img width="100" height="100" src="@cartItem.ImageUrl" />
+                <p>Name: @cartItem.Name</p>
+                <p>Price: @cartItem.Price $</p>
+                <p>Amount: @cartItem.Amount</p>
+
+            </div>
+        }
+    </div>
+}
+
+

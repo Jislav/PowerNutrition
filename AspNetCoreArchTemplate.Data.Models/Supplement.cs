@@ -26,5 +26,6 @@
 
         public virtual ICollection<OrderItem> Orders { get; set; }
             = new List<OrderItem>();
+
     }
 }
