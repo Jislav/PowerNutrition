@@ -35,6 +35,9 @@
             public const int OrderPostCodeMinLength = 4;
             public const int OrderPostCodeMaxLength = 12;
 
+            public const int OrderPhoneNumberLength = 10;
+            public const string OrderPhoneNumberPattern = @"^\d{10}$";
+
         }
     }
 }

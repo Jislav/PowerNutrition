@@ -1,7 +1,7 @@
-﻿using PowerNutrition.Data.Models.Enums;
-
-namespace PowerNutrition.Data.Models
+﻿namespace PowerNutrition.Data.Models
 {
+    using PowerNutrition.Data.Models.Enums;
+    using System.ComponentModel.DataAnnotations;
     public class Order
     {
         public Guid Id { get; set; }
@@ -11,6 +11,8 @@ namespace PowerNutrition.Data.Models
         public string City { get; set; } = null!;
 
         public string PostCode { get; set; } = null!;
+
+        public string PhoneNumber { get; set; } = null!;
 
         public decimal TotalPrice { get; set; }
 

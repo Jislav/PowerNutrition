@@ -23,7 +23,7 @@
 
             entity
                 .Property(o => o.PostCode)
-                .HasMaxLength(OrderPostCodeMinLength)
+                .HasMaxLength(OrderPostCodeMaxLength)
                 .IsRequired();
 
             entity
@@ -38,6 +38,11 @@
             entity
                 .Property(o => o.TotalPrice)
                 .HasPrecision(18, 4);
+
+            entity
+                .Property(o => o.PhoneNumber)
+                .HasMaxLength(OrderPhoneNumberLength)
+                .IsRequired();
         }
     }
 }
