@@ -2,6 +2,7 @@
 @model IEnumerable<AllCartItemsViewmodel>
 @{
     ViewData["Title"] = "My Cart";
+    decimal totalPrice = 0;
 }
 @if (Model.Count() <= 0)
 {
@@ -9,17 +10,29 @@
 }
 else
 {
-    <div style="display:flex ; flex-direction: row">
+    <div>
         @foreach (var cartItem in Model)
         {
-            <div style="width: 100%; display: flex">
+            <div style="width: 100%; display: flex; justify-content:space-between; gap: 10px; align-items: center">
                 <img width="100" height="100" src="@cartItem.ImageUrl" />
-                <p>Name: @cartItem.Name</p>
-                <p>Price: @cartItem.Price $</p>
-                <p>Amount: @cartItem.Amount</p>
-
+                <p style="flex: 1">Name: @cartItem.Name</p>
+                <p style="flex: 1">Price: @cartItem.Price $</p>
+                <p style="flex: 1">Amount: @cartItem.Amount</p>
+                <form style="flex: 1" asp-controller="Cart" asp-action="RemoveFromCart" method="post">
+                    <input type="hidden" name="id" value="Model.Id" />
+                    <button type="submit" class="btn btn-danger">Remove</button>
+                </form>
+                @{
+                    totalPrice += decimal.Parse(cartItem.Price);
+                }
             </div>
         }
+        <div style="text-align: right">
+            <p style="font-weight:bold">Final Price: @totalPrice $</p>
+            <form asp-controller="Order" asp-action="ProceedToPurchase" method="post">
+                <button type="submit" class="btn btn-success">Proceed to Purchase</button>
+            </form>
+        </div>
     </div>
 }
 

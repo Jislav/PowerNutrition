@@ -16,13 +16,30 @@
             this.cartService = cartService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var userId = this.GetUserId();
+            string? userId = this.GetUserId();
+
             IEnumerable<AllCartItemsViewmodel?> cartItems = await this.cartService
                 .GetAllCartItemsAsync(userId);
 
             return View(cartItems);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(string? supplementId)
+        {
+            string? userId = this.GetUserId();
+
+            bool taskResult = await this.cartService
+                .AddToCartAsync(userId, supplementId);
+
+            if(taskResult == false)
+            {
+                //TODO: Redirect to custom error page
+            }
+
+            return this.Redirect(nameof(Index));
         }
     }
 }

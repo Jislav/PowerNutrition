@@ -1,6 +1,5 @@
 ﻿namespace PowerNutrition.Services.Core
 {
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using PowerNutrition.Data;
     using PowerNutrition.Data.Models;
@@ -17,6 +16,39 @@
         {
             this.dbContext = dbContext;
         }
+
+        public async Task<bool> AddToCartAsync(string? userId, string? supplementId)
+        {
+            if(userId != null && supplementId != null)
+            {
+                CartItem? cartItem = await this.dbContext
+                    .CartsItems
+                    .Include(ci => ci.Supplement)
+                    .FirstOrDefaultAsync(ci => userId.ToLower() == ci.UserId.ToLower() && ci.SupplementId.ToString().ToLower() == supplementId.ToLower());
+
+                if(cartItem == null)
+                {
+                    CartItem newCartItem = new CartItem()
+                    {
+                        UserId = userId,
+                        SupplementId = Guid.Parse(supplementId)
+                    };
+
+                    await this.dbContext.AddAsync(newCartItem);
+                }
+                else
+                {
+                    cartItem.Quantity++;
+                }
+
+                await this.dbContext.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
         public async Task<IEnumerable<AllCartItemsViewmodel?>> GetAllCartItemsAsync(string? userId)
         {
             IEnumerable<AllCartItemsViewmodel?> userCartItems = null;
@@ -39,6 +71,11 @@
             }
 
             return userCartItems;
+        }
+
+        public Task<bool> RemoveFromCartAsync(string? userId, string? supplementId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
