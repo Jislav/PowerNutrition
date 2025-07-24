@@ -23,7 +23,6 @@
             {
                 CartItem? cartItem = await this.dbContext
                     .CartsItems
-                    .Include(ci => ci.Supplement)
                     .FirstOrDefaultAsync(ci => userId.ToLower() == ci.UserId.ToLower() && ci.SupplementId.ToString().ToLower() == supplementId.ToLower());
 
                 if(cartItem == null)
@@ -40,6 +39,12 @@
                 {
                     cartItem.Quantity++;
                 }
+
+                Supplement supplementToModify = await this.dbContext
+                    .Supplements
+                    .FirstOrDefaultAsync(s => s.Id.ToString().ToLower() == supplementId);
+
+                supplementToModify!.Stock--;
 
                 await this.dbContext.SaveChangesAsync();
 
@@ -73,9 +78,34 @@
             return userCartItems;
         }
 
-        public Task<bool> RemoveFromCartAsync(string? userId, string? supplementId)
+        public async Task<bool> RemoveFromCartAsync(string? userId, string? supplementId)
         {
-            throw new NotImplementedException();
+            int stockToRenew = 0;
+
+            if(userId != null && supplementId != null)
+            {
+                CartItem? cartItem = await this.dbContext
+                    .CartsItems
+                    .FirstOrDefaultAsync(ci => userId.ToLower() == ci.UserId.ToLower() && ci.SupplementId.ToString().ToLower() == supplementId.ToLower());
+
+                if (cartItem != null)
+                {
+                    stockToRenew = cartItem.Quantity;
+                    this.dbContext.Remove(cartItem);
+
+                    Supplement supplementToModify = await this.dbContext
+                        .Supplements
+                        .FirstOrDefaultAsync(s => s.Id.ToString().ToLower() == supplementId);
+
+                    supplementToModify!.Stock += stockToRenew;
+
+                    await this.dbContext.SaveChangesAsync();
+
+                    return true;
+                }
+                return false;
+            }
+            return false;
         }
     }
 }

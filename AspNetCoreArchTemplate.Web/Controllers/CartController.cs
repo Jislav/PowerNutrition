@@ -41,5 +41,21 @@
 
             return this.Redirect(nameof(Index));
         }
+        [HttpPost]
+
+        public async Task<IActionResult> RemoveFromCart(string? supplementId)
+        {
+            string? userId = this.GetUserId();
+
+            bool taskResult = await this.cartService
+                .RemoveFromCartAsync(userId, supplementId);
+
+            if(taskResult == false)
+            {
+                //TODO: Redirect to custom error page
+            }
+
+            return this.Redirect(nameof(Index));
+        }
     }
 }
