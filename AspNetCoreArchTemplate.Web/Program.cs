@@ -30,6 +30,7 @@ namespace PowerNutrition.Web
             builder.Services.AddScoped<ISupplementService, SupplementService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddControllersWithViews();
 
             WebApplication? app = builder.Build();

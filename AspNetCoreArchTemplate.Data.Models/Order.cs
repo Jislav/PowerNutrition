@@ -1,7 +1,6 @@
 ﻿namespace PowerNutrition.Data.Models
 {
     using PowerNutrition.Data.Models.Enums;
-    using System.ComponentModel.DataAnnotations;
     public class Order
     {
         public Guid Id { get; set; }
