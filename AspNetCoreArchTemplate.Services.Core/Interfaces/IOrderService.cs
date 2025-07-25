@@ -5,5 +5,7 @@ namespace PowerNutrition.Services.Core.Interfaces
     public interface IOrderService
     {
         Task<IEnumerable<UserOrderHistoryViewmodel>> GetUserOrderHistoryAsync(string? userId);
+
+        Task<bool> PlaceOrderAsync(string? userId, OrderInputModel input);
     }
 }

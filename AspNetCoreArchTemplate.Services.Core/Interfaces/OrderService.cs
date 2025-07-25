@@ -2,6 +2,7 @@
 {
     using Microsoft.EntityFrameworkCore;
     using PowerNutrition.Data;
+    using PowerNutrition.Data.Models;
     using PowerNutrition.Web.ViewModels.Order;
     public class OrderService : IOrderService
     {
@@ -44,6 +45,49 @@
                 .ToArrayAsync();
             }
             return currentUserOrders;
+        }
+
+        public async Task<bool> PlaceOrderAsync(string? userId, OrderInputModel input)
+        {
+            if(userId != null)
+            {
+                List<CartItem> userCartItems = await this.dbContext
+                .CartsItems
+                .Include(c => c.Supplement)
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
+
+                if (userCartItems.Count == 0)
+                {
+                    return false;
+                }
+
+                decimal totalPrice = userCartItems.Sum(ci => ci.Supplement.Price * ci.Quantity);
+
+                Order orderToPlace = new Order
+                {
+                    Address = input.Address,
+                    City = input.City,
+                    PostCode = input.PostCode,
+                    PhoneNumber = input.PhoneNumber,
+                    TotalPrice = totalPrice,
+                    UserId = userId!,
+                    Items = userCartItems.Select(ci => new OrderItem
+                    {
+                        SupplementId = ci.SupplementId,
+                        Quantity = ci.Quantity,
+                    })
+                    .ToList()
+                };
+
+                await this.dbContext.Orders.AddAsync(orderToPlace);
+                this.dbContext.CartsItems.RemoveRange(userCartItems);
+                await this.dbContext.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

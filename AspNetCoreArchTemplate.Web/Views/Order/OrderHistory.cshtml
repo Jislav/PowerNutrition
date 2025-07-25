@@ -1,0 +1,28 @@
+﻿@using PowerNutrition.Web.ViewModels.Order;
+@model IEnumerable<UserOrderHistoryViewmodel>
+@{
+    ViewData["Title"] = "Order History";
+}
+
+@if(Model == null || !Model.Any())
+{
+    <h1 style="text-align: center">You haven't made any purchases yet!</h1>
+}
+else
+{
+    foreach(var order in Model)
+    {
+        <div style="border: 2px solid black; width: 100%; display: flex; justify-content:space-between; gap: 10px; align-items: center; margin-bottom: 15px">
+            <p style="flex: 1">Address: @order.Address</p>
+            <p style="flex: 1">City: @order.City</p>
+            <p style="flex: 1">Post Code: @order.PostCode</p>
+            <p style="flex: 1">Phone Number: @order.PhoneNumber</p>
+            <p style="flex: 1">Order Status: @order.OrderStatus</p>
+
+            <form asp-controller="Order" asp-action="Details" method="get">
+                <input type="hidden" name="id" value="@order.Id" />
+                <button type="submit" class="btn btn-primary">More Details</button>
+            </form>
+        </div>
+    }
+}

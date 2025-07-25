@@ -17,7 +17,7 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> MyCart()
         {
             string? userId = this.GetUserId();
 
