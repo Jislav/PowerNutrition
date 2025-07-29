@@ -13,7 +13,7 @@ namespace PowerNutrition.Web.Controllers
             this.orderService = orderService;
         }
 
-        public async Task<IActionResult> MyOrders()
+        public async Task<IActionResult> OrderHistory()
         {
             string? userId = this.GetUserId();
 
@@ -37,7 +37,7 @@ namespace PowerNutrition.Web.Controllers
 
             //TODO: Handle error with custom error page
 
-            return this.RedirectToAction(nameof(Index));
+            return this.RedirectToAction(nameof(OrderHistory));
         }
     }
 }

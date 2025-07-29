@@ -39,7 +39,7 @@
                 //TODO: Redirect to custom error page
             }
 
-            return this.Redirect(nameof(Index));
+            return this.RedirectToAction("Index", "Supplement");
         }
         [HttpPost]
 

@@ -1,27 +1,27 @@
 ﻿namespace PowerNutrition.Web.ViewModels.Order
 {
-    using PowerNutrition.Data.Models;
+    using static PowerNutrition.GCommon.ErrorMessages.OrderInputModelMessages;
     using System.ComponentModel.DataAnnotations;
     using static PowerNutrition.GCommon.ApplicationConstants.OrderConstants;
     public class OrderInputModel
     {
-        [MinLength(OrderAddressMinLength)]
-        [MaxLength(OrderAddressMaxLength)]
-        [Required]
+        [MinLength(OrderAddressMinLength, ErrorMessage = OrderAddressLengthMessage)]
+        [MaxLength(OrderAddressMaxLength, ErrorMessage = OrderAddressLengthMessage)]
+        [Required(ErrorMessage = OrderAddressRequiredMessage)]
         public string Address { get; set; } = null!;
 
-        [MinLength(OrderCityMinLength)]
-        [MaxLength(OrderCityMaxLength)]
-        [Required]
+        [MinLength(OrderCityMinLength, ErrorMessage = OrderCityLengthMessage)]
+        [MaxLength(OrderCityMaxLength, ErrorMessage = OrderCityLengthMessage)]
+        [Required(ErrorMessage = OrderCityRequiredMessage)]
         public string City { get; set; } = null!;
 
-        [MinLength(OrderPostCodeMinLength)]
-        [MaxLength(OrderPostCodeMaxLength)]
-        [Required]
+        [MinLength(OrderPostCodeMinLength, ErrorMessage = OrderPostCodeLengthMessage)]
+        [MaxLength(OrderPostCodeMaxLength, ErrorMessage = OrderPostCodeLengthMessage)]
+        [Required(ErrorMessage = OrderPostCodeRequiredMessage)]
         public string PostCode { get; set; } = null!;
 
-        [RegularExpression(OrderPhoneNumberPattern)]
-        [Required]
+        [RegularExpression(OrderPhoneNumberPattern, ErrorMessage = OrderPhoneNumberLengthMessage)]
+        [Required(ErrorMessage = OrderPhoneNumberRequiredMessage)]
         public string PhoneNumber { get; set; } = null!;
 
     }
