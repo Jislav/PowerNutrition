@@ -12,6 +12,46 @@
         {
             this.dbContext = dbContext;
         }
+
+        public async Task<OrderDetailsViewModel> GetOrderDetailsAsync(string? userId, string? orderId)
+        {
+            OrderDetailsViewModel? orderDetails = null;
+
+            if (userId != null && orderId != null)
+            {
+                Order? orderToDetailsToDisplay = await this.dbContext
+
+                    .Orders
+                    .Include(o => o.Items)
+                    .ThenInclude(oi => oi.Supplement)
+                    .FirstOrDefaultAsync(o => o.Id.ToString().ToLower() == orderId.ToLower());
+
+                if (orderToDetailsToDisplay != null && orderToDetailsToDisplay.UserId.ToString().ToLower() == userId.ToLower())
+                {
+                    orderDetails = new OrderDetailsViewModel()
+                    {
+                        Address = orderToDetailsToDisplay.Address,
+                        PhoneNumber = orderToDetailsToDisplay.PhoneNumber,
+                        City = orderToDetailsToDisplay.City,
+                        PostCode = orderToDetailsToDisplay.PostCode,
+                        TotalPrice = orderToDetailsToDisplay.TotalPrice.ToString("f2"),
+                        Items = orderToDetailsToDisplay.Items
+                          .Select(oi => new OrderDetailsItemsListViewmodel
+                          {
+                              Name = oi.Supplement.Name,
+                              Quantity = oi.Quantity.ToString(),
+                              Price = (oi.Quantity * oi.Supplement.Price).ToString("f2"),
+                              ImageUrl = oi.Supplement.ImageUrl
+                          })
+                          .ToArray()
+                    };
+                }
+            }
+
+            return orderDetails;
+        }
+
+
         public async Task<IEnumerable<UserOrderHistoryViewmodel>> GetUserOrderHistoryAsync(string? userId)
         {
             IEnumerable<UserOrderHistoryViewmodel>? currentUserOrders = null;
@@ -49,7 +89,7 @@
 
         public async Task<bool> PlaceOrderAsync(string? userId, OrderInputModel input)
         {
-            if(userId != null)
+            if (userId != null)
             {
                 List<CartItem> userCartItems = await this.dbContext
                 .CartsItems

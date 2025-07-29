@@ -20,7 +20,7 @@ else
             <p style="flex: 1">Order Status: @order.OrderStatus</p>
 
             <form asp-controller="Order" asp-action="Details" method="get">
-                <input type="hidden" name="id" value="@order.Id" />
+                <input type="hidden" name="orderId" value="@order.Id" />
                 <button type="submit" class="btn btn-primary">More Details</button>
             </form>
         </div>

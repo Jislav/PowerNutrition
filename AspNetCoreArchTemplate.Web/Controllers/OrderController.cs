@@ -39,5 +39,20 @@ namespace PowerNutrition.Web.Controllers
 
             return this.RedirectToAction(nameof(OrderHistory));
         }
+        [HttpGet]
+        public async Task<IActionResult> Details(string orderId)
+        {
+            string userId = this.GetUserId()!;
+
+            OrderDetailsViewModel? orderDetails = await this.orderService
+                .GetOrderDetailsAsync(userId, orderId);
+
+            if(orderDetails != null)
+            {
+                return this.View(orderDetails);
+            }
+
+            return this.RedirectToAction(nameof(OrderHistory));
+        }
     }
 }

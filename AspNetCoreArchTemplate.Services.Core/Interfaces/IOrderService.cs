@@ -7,5 +7,9 @@ namespace PowerNutrition.Services.Core.Interfaces
         Task<IEnumerable<UserOrderHistoryViewmodel>> GetUserOrderHistoryAsync(string? userId);
 
         Task<bool> PlaceOrderAsync(string? userId, OrderInputModel input);
+
+        Task<OrderDetailsViewModel> GetOrderDetailsAsync(string? userId, string orderId);
+
+
     }
 }
