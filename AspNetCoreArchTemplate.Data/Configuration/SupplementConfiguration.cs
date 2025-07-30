@@ -33,7 +33,7 @@
 
             entity
                 .Property(s => s.Price)
-                .HasPrecision(18, 4);
+                .HasPrecision(4, 2);
 
 
             entity
