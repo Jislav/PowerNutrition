@@ -72,5 +72,33 @@
             Console.WriteLine("everything workds");
             return this.RedirectToAction(nameof(Details), controllerName: "Supplement", new { id = supplementId });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string? supplementId)
+        {
+            SupplementDeleteInputModel? inputModel = await this.supplementService
+                .GetSupplementToDelete(supplementId);
+            
+            if(inputModel != null)
+            {
+                return this.View(inputModel);
+            }
+
+            return this.RedirectToAction("Delete", "Manage");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(SupplementDeleteInputModel inputModel)
+        {
+            bool taskResult = await this.supplementService
+                .DeleteSupplement(inputModel);
+
+            if (taskResult == false)
+            {
+                //TODO: Handle notifications pop up or something else
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            return this.RedirectToAction("Delete", "Manage");
+        }
     }
 }

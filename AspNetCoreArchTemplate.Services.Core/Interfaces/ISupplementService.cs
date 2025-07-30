@@ -8,5 +8,9 @@
         Task<DetailsSupplementViewmodel?> GetDetailsForSupplementAsync(string? id);
 
         Task<Guid?> PersistAddSupplementAsync(AddSupplementInputModel inputModel);
+
+        Task<SupplementDeleteInputModel?> GetSupplementToDelete(string? supplementId);
+
+        Task<bool> DeleteSupplement(SupplementDeleteInputModel inputModel);
     }
 }

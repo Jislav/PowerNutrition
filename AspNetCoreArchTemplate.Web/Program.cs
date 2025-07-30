@@ -27,6 +27,7 @@ namespace PowerNutrition.Web
                 })
                 .AddEntityFrameworkStores<PowerNutritionDbContext>();
 
+            builder.Services.AddScoped<IManageService, ManageService>();
             builder.Services.AddScoped<ISupplementService, SupplementService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ICartService, CartService>();
