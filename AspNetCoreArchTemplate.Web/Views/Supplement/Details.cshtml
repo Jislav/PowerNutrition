@@ -7,7 +7,7 @@
 <h2>@Model.Name</h2>
 
 <div>
-    <img src="@Model.ImageUrl" />
+    <img style="height: 300px; width: 300px" src="@Model.ImageUrl" />
     <p>Brand: @Model.Brand</p>
     <p>Price: @Model.Price</p>
     <p>In stock: @Model.Quantity left</p>
@@ -16,8 +16,7 @@
 
     <form asp-controller="Cart" asp-action="AddToCart" method="post" class="flex-1">
         <input type="hidden" name="supplementId" value="@Model.Id" />
-        <button type="submit"
-                class="w-full px-3 py-1 text-sm bg-green-600 rounded hover:bg-green-700">
+        <button type="submit" class="btn btn-success">
             Add to Cart
         </button>
     </form>

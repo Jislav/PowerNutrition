@@ -9,7 +9,7 @@
 <div style="display:flex; flex-direction: row; gap: 10px; flex-wrap: wrap">
     @foreach (var supplement in Model)
     {
-        <div>
+        <div style="margin:15px 15px; border:2px solid black; padding:10px">
             <img height="300" width="300" src="@supplement.ImageUrl"/>
             <h3>@supplement.Name</h3>
             <p>Brand: @supplement.Brand</p>
@@ -18,12 +18,14 @@
             <p>Quantity @supplement.Quantity</p>
             <div>
                 <a asp-controller="Supplement" asp-action="Details" asp-route-id="@supplement.Id">
-                    Details
+                    <p class="btn btn-primary">
+                        Details
+                    </p>
                 </a>
 
                 <form asp-controller="Cart" asp-action="AddToCart" method="post" class="flex-1">
                     <input type="hidden" name="supplementId" value="@supplement.Id" />
-                    <button type="submit">
+                    <button type="submit" class="btn btn-success">
                         Add to Cart
                     </button>
                 </form>

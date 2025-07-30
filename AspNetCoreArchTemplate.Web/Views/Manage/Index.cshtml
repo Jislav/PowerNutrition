@@ -1,1 +1,19 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Manage Panel";
+}
+
+<h1 style="font-size:48px; text-align:center">Manager Panel</h1>
+<div style="margin: 20px auto;border:black 2px solid; padding: 10px; width: 50%">
+    <a asp-controller="Supplement" asp-action="Add" class="btn btn-primary d-block" style="width: 50%; margin: 20px auto">
+        Add Supplement
+    </a>
+    <a asp-controller="Supplement" asp-action="Delete" class="btn btn-danger  d-block" style="width: 50%; margin: 20px auto">
+        Remove Supplement
+    </a>
+    <a asp-controller="Supplement" asp-action="Edit" class="btn btn-primary  d-block" style="width: 50%; margin: 20px auto">
+        Edit Supplement
+    </a>
+    <a asp-controller="Manage" asp-action="Sales" class="btn btn-primary  d-block" style="width: 50%; margin: 20px auto">
+        Top 3 Sellers
+    </a>
+</div>

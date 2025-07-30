@@ -40,7 +40,7 @@
         {
             DetailsSupplementViewmodel? supplementDetails = null;
 
-            if(id != null)
+            if (id != null)
             {
                 Supplement? supplementToDisplay = await this.dbContext
                 .Supplements
@@ -48,7 +48,7 @@
                 .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id.ToString().ToLower() == id.ToLower());
 
-                if(supplementToDisplay != null)
+                if (supplementToDisplay != null)
                 {
                     supplementDetails = new DetailsSupplementViewmodel()
                     {
@@ -65,6 +65,37 @@
             }
 
             return supplementDetails;
+        }
+
+        public async Task<Guid?> PersistAddSupplementAsync(AddSupplementInputModel inputModel)
+        {
+            Guid? newSupplementId = null;
+
+            Category? categoryRef = await this.dbContext
+                .Categories
+                .FindAsync(inputModel.CategoryId);
+
+            if (categoryRef != null)
+            {
+                Supplement supplementToAdd = new Supplement()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = inputModel.Name,
+                    Description = inputModel.Description,
+                    Brand = inputModel.Brand,
+                    ImageUrl = inputModel.ImageUrl,
+                    Price = inputModel.Price,
+                    Stock = inputModel.Stock,
+                    Weight = inputModel.Weigth,
+                    CategoryId = inputModel.CategoryId
+                };
+
+                await this.dbContext.AddAsync(supplementToAdd);
+                await this.dbContext.SaveChangesAsync();
+                newSupplementId = supplementToAdd.Id;
+            }
+
+            return newSupplementId;
         }
     }
 }

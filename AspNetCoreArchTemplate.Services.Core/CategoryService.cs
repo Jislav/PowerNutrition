@@ -11,14 +11,14 @@
         {
             this.dbContext = dbContext;
         }
-        public async Task<IEnumerable<SupplementCategoryDropDownFilterViewmodel>> GetAllCategoriesAsync()
+        public async Task<ICollection<SupplementCategoryDropDownFilterViewmodel>> GetAllCategoriesAsync()
         {
-            IEnumerable<SupplementCategoryDropDownFilterViewmodel> categories = await this.dbContext
+            ICollection<SupplementCategoryDropDownFilterViewmodel> categories = await this.dbContext
                 .Categories
                 .Select(c => new SupplementCategoryDropDownFilterViewmodel
                 {
-                    Id = c.Id.ToString(),
-                    CategoryName = c.Name
+                    Id = c.Id,
+                    Name = c.Name
                 })
                 .ToListAsync();
 

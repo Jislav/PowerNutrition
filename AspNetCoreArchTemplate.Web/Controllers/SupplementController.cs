@@ -32,12 +32,45 @@
             DetailsSupplementViewmodel? supplement = await this.supplementService
                 .GetDetailsForSupplementAsync(id);
 
-            if(supplement != null)
+            if (supplement != null)
             {
                 return this.View(supplement);
             }
 
             return this.RedirectToAction(nameof(Index));
+        }
+        [HttpGet]
+        public async Task<IActionResult> Add()
+        {
+            ICollection<SupplementCategoryDropDownFilterViewmodel> categories = await this.categoryService
+                .GetAllCategoriesAsync();
+
+            AddSupplementInputModel inputModel = new AddSupplementInputModel()
+            {
+                Categories = categories
+            };
+            return this.View(inputModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Add(AddSupplementInputModel inputModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                Console.WriteLine("ModelState is invalid");
+                inputModel.Categories = await this.categoryService.GetAllCategoriesAsync();
+                return this.View(inputModel);
+            }
+
+            Guid? supplementId = await this.supplementService.PersistAddSupplementAsync(inputModel);
+
+            if (supplementId == null)
+            {
+                Console.WriteLine("supplement id is null");
+                inputModel.Categories = await this.categoryService.GetAllCategoriesAsync();
+                return this.View(inputModel);
+            }
+            Console.WriteLine("everything workds");
+            return this.RedirectToAction(nameof(Details), controllerName: "Supplement", new { id = supplementId });
         }
     }
 }

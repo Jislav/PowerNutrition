@@ -6,6 +6,6 @@ namespace PowerNutrition.Services.Core.Interfaces
 {
     public interface ICategoryService
     {
-        Task<IEnumerable<SupplementCategoryDropDownFilterViewmodel>> GetAllCategoriesAsync();
+        Task<ICollection<SupplementCategoryDropDownFilterViewmodel>> GetAllCategoriesAsync();
     }
 }
