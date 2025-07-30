@@ -17,5 +17,7 @@
         public string Price { get; set; } = null!;
 
         public string Quantity { get; set; } = null!;
+
+        public string Weigth { get; set; } = null!;
     }
 }

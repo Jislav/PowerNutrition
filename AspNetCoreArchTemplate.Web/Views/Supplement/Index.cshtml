@@ -15,7 +15,8 @@
             <p>Brand: @supplement.Brand</p>
             <p>Type: @supplement.Category</p>
             <p>Price: @supplement.Price $</p>
-            <p>Quantity @supplement.Quantity</p>
+            <p>Quantity: @supplement.Quantity</p>
+            <p>Weight: @supplement.Weigth kg</p>
             <div>
                 <a asp-controller="Supplement" asp-action="Details" asp-route-id="@supplement.Id">
                     <p class="btn btn-primary">

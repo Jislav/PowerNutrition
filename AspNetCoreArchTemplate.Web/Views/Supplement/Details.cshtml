@@ -13,6 +13,7 @@
     <p>In stock: @Model.Quantity left</p>
     <p>Type: @Model.Category</p>
     <p>Description: @Model.Description</p>
+    <p>Weight: @Model.Weight kg</p>
 
     <form asp-controller="Cart" asp-action="AddToCart" method="post" class="flex-1">
         <input type="hidden" name="supplementId" value="@Model.Id" />

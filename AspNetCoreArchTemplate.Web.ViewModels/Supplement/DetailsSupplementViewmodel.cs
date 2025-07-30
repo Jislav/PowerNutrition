@@ -17,5 +17,7 @@
         public string Quantity { get; set; } = null!;
 
         public string Description { get; set; } = null!;
+
+        public string Weight { get; set; } = null!;
     }
 }

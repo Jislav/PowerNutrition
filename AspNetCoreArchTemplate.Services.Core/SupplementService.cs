@@ -54,6 +54,7 @@
                     Category = s.Category.Name,
                     Price = s.Price.ToString("f2"),
                     Quantity = s.Stock.ToString(),
+                    Weigth = s.Weight.ToString()
                 })
                 .ToListAsync();
 
@@ -84,7 +85,8 @@
                         Category = supplementToDisplay.Category.Name,
                         Price = supplementToDisplay.Price.ToString("f2"),
                         Quantity = supplementToDisplay.Stock.ToString(),
-                        Description = supplementToDisplay.Description
+                        Description = supplementToDisplay.Description,
+                        Weight = supplementToDisplay.Weight.ToString()
                     };
                 }
             }
