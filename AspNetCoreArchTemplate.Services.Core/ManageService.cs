@@ -32,5 +32,27 @@
 
             return supplementsDeleteList;
         }
+
+        public async Task<IEnumerable<AllSupplemenetsEditViewmodel>> GetAllSupplementsEditListAsync()
+        {
+
+            IEnumerable<AllSupplemenetsEditViewmodel> supplementsDeleteList = await this.dbContext
+               .Supplements
+               .Include(s => s.Category)
+               .AsNoTracking()
+               .Select(s => new AllSupplemenetsEditViewmodel()
+               {
+                   Id = s.Id.ToString(),
+                   Name = s.Name,
+                   Brand = s.Brand,
+                   ImageUrl = s.ImageUrl,
+                   Category = s.Category.Name,
+                   Price = s.Price.ToString("f2"),
+                   Quantity = s.Stock.ToString(),
+               })
+               .ToListAsync();
+
+            return supplementsDeleteList;
+        }
     }
 }

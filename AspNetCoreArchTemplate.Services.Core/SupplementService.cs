@@ -5,6 +5,7 @@
     using PowerNutrition.Data.Models;
     using PowerNutrition.Services.Core.Interfaces;
     using PowerNutrition.Web.ViewModels.Supplement;
+    using System.Diagnostics;
 
     public class SupplementService : ISupplementService
     {
@@ -137,15 +138,85 @@
                     .Supplements
                     .FindAsync(parsedGuid);
 
-                if(supplementToDelete != null)
+                if (supplementToDelete != null)
                 {
                     supplementToDelete.IsDeleted = true;
                     await this.dbContext.SaveChangesAsync();
                     taskResult = true;
-                }                          
+                }
             }
 
             return taskResult;
         }
+
+        public async Task<SupplementEditInputModel?> GetSupplementForEditAsync(string? supplementId)
+        {
+            SupplementEditInputModel? supplementToEdit = null;
+
+            if (supplementId != null)
+            {
+                bool guidIsValid = Guid.TryParse(supplementId, out Guid parsedGuid);
+
+                if (guidIsValid)
+                {
+                    Supplement? supplement = await this.dbContext
+                        .Supplements
+                        .FindAsync(parsedGuid);
+
+                    if (supplement != null)
+                    {
+                        supplementToEdit = new SupplementEditInputModel()
+                        {
+                            Id = supplement.Id.ToString(),
+                            Name = supplement.Name,
+                            Description = supplement.Description,
+                            Brand = supplement.Brand,
+                            Price = supplement.Price,
+                            ImageUrl = supplement.ImageUrl,
+                            Weigth = supplement.Weight,
+                            Stock = supplement.Stock,
+                            CategoryId = supplement.CategoryId
+                        };
+                    }
+                }
+            }
+
+            return supplementToEdit;
+        }
+
+        public async Task<Guid?> PersistEditSupplementAsync(SupplementEditInputModel inputModel)
+        {
+            Guid? editedSupplementId = null;
+
+            Category? categoryRef = await this.dbContext
+                .Categories
+                .FindAsync(inputModel.CategoryId);
+
+            bool guidIsValid = Guid.TryParse(inputModel.Id, out Guid parsedGuid);
+
+            if (categoryRef != null && inputModel != null && guidIsValid)
+            {
+                Supplement? supplementToEdit = await this.dbContext
+                    .Supplements
+                    .FindAsync(parsedGuid);
+
+                if(supplementToEdit != null)
+                {
+                    supplementToEdit.Name = inputModel.Name;
+                    supplementToEdit.Description = inputModel.Description;
+                    supplementToEdit.Brand = inputModel.Brand;
+                    supplementToEdit.ImageUrl = inputModel.ImageUrl;
+                    supplementToEdit.Price = inputModel.Price;
+                    supplementToEdit.Stock = inputModel.Stock;
+                    supplementToEdit.Weight = inputModel.Weigth;
+                    supplementToEdit.CategoryId = inputModel.CategoryId;
+
+                    await this.dbContext.SaveChangesAsync();
+                    editedSupplementId = supplementToEdit.Id;
+                }
+            }
+            return editedSupplementId;
+        }
     }
 }
+

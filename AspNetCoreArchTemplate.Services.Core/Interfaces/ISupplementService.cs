@@ -12,5 +12,9 @@
         Task<SupplementDeleteInputModel?> GetSupplementToDelete(string? supplementId);
 
         Task<bool> DeleteSupplement(SupplementDeleteInputModel inputModel);
+
+        Task<SupplementEditInputModel?> GetSupplementForEditAsync(string? supplementId);
+
+        Task<Guid?> PersistEditSupplementAsync(SupplementEditInputModel inputModel);
     }
 }

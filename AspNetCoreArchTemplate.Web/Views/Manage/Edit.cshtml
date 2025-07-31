@@ -1,0 +1,29 @@
+﻿@using PowerNutrition.Web.ViewModels.Manage;
+@model IEnumerable<AllSupplemenetsEditViewmodel>
+@{
+    ViewData["Title"] = "Supplements";
+}
+
+<h2>All Supplements</h2>
+
+<div style="display:flex; flex-direction: row; gap: 10px; flex-wrap: wrap">
+    @foreach (var supplement in Model)
+    {
+        <div style="margin:15px 15px; border:2px solid black; padding:10px">
+            <img height="300" width="300" src="@supplement.ImageUrl" />
+            <h3>@supplement.Name</h3>
+            <p>Brand: @supplement.Brand</p>
+            <p>Type: @supplement.Category</p>
+            <p>Price: @supplement.Price $</p>
+            <p>Quantity @supplement.Quantity</p>
+            <div>
+                <form asp-controller="Supplement" asp-action="Edit" method="get" class="flex-1">
+                    <input type="hidden" name="supplementId" value="@supplement.Id" />
+                    <button type="submit" class="btn btn-secondary">
+                        Edit
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+</div>

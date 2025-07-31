@@ -21,18 +21,18 @@
         public string Brand { get; set; } = null!;
 
         [Required(ErrorMessage = SupplementPriceRequiredMessage)]
-        [Range(1.00, double.MaxValue)]
+        [Range(1.00, double.MaxValue, ErrorMessage = "Price must be a more than 1.00")]
         public decimal Price { get; set; }
 
         [Required(ErrorMessage = SupplementImageUrlRequiredMessage)]
         public string ImageUrl { get; set; } = null!;
 
         [Required(ErrorMessage = SupplementStockRequiredMessage)]
-        [Range(0, int.MaxValue, ErrorMessage = "Stock must be a positive integer")]
+        [Range(0, int.MaxValue, ErrorMessage = "Stock must be a positive number")]
         public int Stock { get; set; }
 
         [Required(ErrorMessage = SupplementWeigthRequiredMessage)]
-        [Range(0.01, double.MaxValue)]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Weight must be a positive number")]
         public double Weigth { get; set; }
 
         [Required(ErrorMessage = SupplementCategoryRequiredMessage)]

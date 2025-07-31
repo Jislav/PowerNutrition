@@ -78,8 +78,8 @@
         {
             SupplementDeleteInputModel? inputModel = await this.supplementService
                 .GetSupplementToDelete(supplementId);
-            
-            if(inputModel != null)
+
+            if (inputModel != null)
             {
                 return this.View(inputModel);
             }
@@ -99,6 +99,43 @@
             }
 
             return this.RedirectToAction("Delete", "Manage");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string? supplementId)
+        {
+            SupplementEditInputModel? supplementViewmodel = await this.supplementService
+                .GetSupplementForEditAsync(supplementId);
+
+            if (supplementViewmodel != null)
+            {
+                supplementViewmodel.Categories = await this.categoryService
+                .GetAllCategoriesAsync();
+            }
+            return this.View(supplementViewmodel);
+        }
+        public async Task<IActionResult> Edit(SupplementEditInputModel inputModel)
+        {
+            if(!ModelState.IsValid)
+            {
+                inputModel.Categories = await this.categoryService
+               .GetAllCategoriesAsync();
+
+                return this.View(inputModel);
+            }
+
+            Guid? editedSupplementId = await this.supplementService
+                .PersistEditSupplementAsync(inputModel);
+
+            if(editedSupplementId == null)
+            {
+                inputModel.Categories = await this.categoryService
+                .GetAllCategoriesAsync();
+
+                return this.View(inputModel);
+
+            }
+            return this.RedirectToAction(nameof(Details), new { id = editedSupplementId });
         }
     }
 }

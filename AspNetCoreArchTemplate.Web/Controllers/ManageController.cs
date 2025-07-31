@@ -26,6 +26,15 @@
 
             return this.View(supplementsDeleteViewmodel);
         }
-       
+
+        [HttpGet]
+        public async Task<IActionResult> Edit()
+        {
+            IEnumerable<AllSupplemenetsEditViewmodel> supplementsEditViewmodel = await this.manageService
+                .GetAllSupplementsEditListAsync();
+
+            return this.View(supplementsEditViewmodel);
+        }
+        
     }
 }
