@@ -6,7 +6,7 @@
 
 @if (Model == null || !Model.Any())
 {
-    <h1 style="text-align: center">You haven't made any purchases yet!</h1>
+    <h1 style="text-align: center">There are no orders that need approval!</h1>
 }
 else
 {
@@ -24,7 +24,7 @@ else
                 <button type="submit" class="btn btn-primary">More Details</button>
             </form>
 
-            <form asp-controller="Manage" asp-action="Approve" method="post">
+            <form asp-controller="Manage" asp-action="ApproveOrder" method="post">
                 <input type="hidden" name="orderId" value="@order.Id" />
                 <button type="submit" class="btn btn-success">Approve</button>
             </form>

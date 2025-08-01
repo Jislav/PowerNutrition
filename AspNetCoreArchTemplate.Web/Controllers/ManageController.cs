@@ -46,5 +46,21 @@
 
             return this.View(pendingOrders);
         }
+        [HttpPost]
+        public async Task<IActionResult> ApproveOrder(string? orderId)
+        {
+            if (orderId != null)
+            {
+                Guid? orderGuid = await this.manageService
+                    .ApproveOrderAsync(orderId);
+
+                if (orderGuid != null)
+                {
+                    return this.RedirectToAction("Details", "Order", new { orderId = orderGuid });
+                }
+            }
+
+            return this.RedirectToAction(nameof(Orders));
+        }
     }
 }
