@@ -1,5 +1,6 @@
 ﻿namespace PowerNutrition.Services.Core.Interfaces
 {
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using PowerNutrition.Data;
     using PowerNutrition.Data.Models;
@@ -7,12 +8,13 @@
     public class OrderService : IOrderService
     {
         private readonly PowerNutritionDbContext dbContext;
+        private readonly UserManager<IdentityUser> userManager;
 
-        public OrderService(PowerNutritionDbContext dbContext)
+        public OrderService(PowerNutritionDbContext dbContext, UserManager<IdentityUser> userManager)
         {
             this.dbContext = dbContext;
+            this.userManager = userManager;
         }
-
         public async Task<IEnumerable<OrdersWithStatusPendingViewmodel>>? GetAllOrdersWithStatusPendingAsync()
         {
             IEnumerable<OrdersWithStatusPendingViewmodel>? pendingOrders = await this.dbContext
@@ -48,14 +50,16 @@
 
             if (userId != null && orderId != null)
             {
-                Order? orderToDetailsToDisplay = await this.dbContext
+                IdentityUser user = await userManager.FindByIdAsync(userId);
 
+                Order? orderToDetailsToDisplay = await this.dbContext
                     .Orders
                     .Include(o => o.Items)
                     .ThenInclude(oi => oi.Supplement)
                     .FirstOrDefaultAsync(o => o.Id.ToString().ToLower() == orderId.ToLower());
 
-                if (orderToDetailsToDisplay != null && orderToDetailsToDisplay.UserId.ToString().ToLower() == userId.ToLower())
+                if (orderToDetailsToDisplay != null && orderToDetailsToDisplay.UserId.ToString().ToLower() == userId.ToLower()
+                    || await this.userManager.IsInRoleAsync(user!, "Manager"))
                 {
                     orderDetails = new OrderDetailsViewModel()
                     {

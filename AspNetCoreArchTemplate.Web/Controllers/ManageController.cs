@@ -1,11 +1,13 @@
 ﻿namespace PowerNutrition.Web.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using PowerNutrition.Services.Core.Interfaces;
     using PowerNutrition.Web.ViewModels.Manage;
     using PowerNutrition.Web.ViewModels.Order;
     using PowerNutrition.Web.ViewModels.Supplement;
 
+    [Authorize(Roles = "Manager")]
     public class ManageController : BaseController
     {
         private readonly IManageService manageService;

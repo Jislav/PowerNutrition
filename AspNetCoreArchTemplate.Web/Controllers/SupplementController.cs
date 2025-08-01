@@ -40,6 +40,7 @@
             return this.RedirectToAction(nameof(Index));
         }
         [HttpGet]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Add()
         {
             ICollection<SupplementCategoryDropDownFilterViewmodel> categories = await this.categoryService
@@ -52,6 +53,7 @@
             return this.View(inputModel);
         }
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Add(AddSupplementInputModel inputModel)
         {
             if (!ModelState.IsValid)
@@ -74,6 +76,7 @@
         }
 
         [HttpGet]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Delete(string? supplementId)
         {
             SupplementDeleteInputModel? inputModel = await this.supplementService
@@ -87,6 +90,7 @@
             return this.RedirectToAction("Delete", "Manage");
         }
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Delete(SupplementDeleteInputModel inputModel)
         {
             bool taskResult = await this.supplementService
@@ -102,6 +106,7 @@
         }
 
         [HttpGet]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(string? supplementId)
         {
             SupplementEditInputModel? supplementViewmodel = await this.supplementService
@@ -115,6 +120,7 @@
             return this.View(supplementViewmodel);
         }
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(SupplementEditInputModel inputModel)
         {
             if(!ModelState.IsValid)
