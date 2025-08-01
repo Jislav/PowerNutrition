@@ -114,6 +114,7 @@
             }
             return this.View(supplementViewmodel);
         }
+        [HttpPost]
         public async Task<IActionResult> Edit(SupplementEditInputModel inputModel)
         {
             if(!ModelState.IsValid)

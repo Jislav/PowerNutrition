@@ -13,6 +13,35 @@
             this.dbContext = dbContext;
         }
 
+        public async Task<IEnumerable<OrdersWithStatusPendingViewmodel>>? GetAllOrdersWithStatusPendingAsync()
+        {
+            IEnumerable<OrdersWithStatusPendingViewmodel>? pendingOrders = await this.dbContext
+                .Orders
+                .Include(o => o.Items)
+                .Where(o => o.Status == 0)
+                .Select(o => new OrdersWithStatusPendingViewmodel()
+                {
+                    Id = o.Id.ToString(),
+                    Address = o.Address,
+                    City = o.City,
+                    PostCode = o.PostCode,
+                    PhoneNumber = o.PhoneNumber,
+                    OrderStatus = o.Status.ToString(),
+                    UserId = o.UserId,
+                    Supplements = o.Items
+                                    .Select(i => new OrderSupplementDetailsViewmodel
+                                    {
+                                        Name = i.Supplement.Name,
+                                        Brand = i.Supplement.Brand,
+                                        TotalPrice = (i.Quantity * i.Supplement.Price).ToString()
+                                    })
+                                    .ToArray()
+                })
+                .ToArrayAsync();
+
+            return pendingOrders;
+        }
+
         public async Task<OrderDetailsViewModel> GetOrderDetailsAsync(string? userId, string? orderId)
         {
             OrderDetailsViewModel? orderDetails = null;

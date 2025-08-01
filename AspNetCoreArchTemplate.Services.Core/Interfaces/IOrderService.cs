@@ -10,6 +10,7 @@ namespace PowerNutrition.Services.Core.Interfaces
 
         Task<OrderDetailsViewModel> GetOrderDetailsAsync(string? userId, string orderId);
 
+        Task<IEnumerable<OrdersWithStatusPendingViewmodel>>? GetAllOrdersWithStatusPendingAsync();
 
     }
 }

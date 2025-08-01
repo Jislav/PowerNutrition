@@ -3,15 +3,18 @@
     using Microsoft.AspNetCore.Mvc;
     using PowerNutrition.Services.Core.Interfaces;
     using PowerNutrition.Web.ViewModels.Manage;
+    using PowerNutrition.Web.ViewModels.Order;
     using PowerNutrition.Web.ViewModels.Supplement;
 
     public class ManageController : BaseController
     {
         private readonly IManageService manageService;
+        private readonly IOrderService orderService;
 
-        public ManageController(IManageService manageService)
+        public ManageController(IManageService manageService, IOrderService orderService)
         {
             this.manageService = manageService;
+            this.orderService = orderService;
         }
         [HttpGet]
         public IActionResult Index()
@@ -35,6 +38,13 @@
 
             return this.View(supplementsEditViewmodel);
         }
-        
+        [HttpGet]
+        public async Task<IActionResult> Orders()
+        {
+            IEnumerable<OrdersWithStatusPendingViewmodel>? pendingOrders = await this.orderService
+                .GetAllOrdersWithStatusPendingAsync();
+
+            return this.View(pendingOrders);
+        }
     }
 }
