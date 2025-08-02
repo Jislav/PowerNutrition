@@ -23,7 +23,7 @@ else
                     <button type="submit" class="btn btn-danger">Remove</button>
                 </form>
                 @{
-                    totalPrice += decimal.Parse(cartItem.Price);
+                    totalPrice += decimal.Parse(cartItem.Price) * int.Parse(cartItem.Amount);
                 }
             </div>
         }

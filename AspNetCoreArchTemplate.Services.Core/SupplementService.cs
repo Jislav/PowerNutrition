@@ -15,31 +15,6 @@
         {
             this.dbContext = dbContext;
         }
-
-        public async Task<SupplementDeleteInputModel?> GetSupplementToDelete(string? supplementId)
-        {
-            SupplementDeleteInputModel? deleteViewmodel = null;
-
-            bool guidIsValid = Guid.TryParse(supplementId, out Guid parsedGuid);
-            if (supplementId != null)
-            {
-                Supplement? supplementToDelete = await this.dbContext
-                    .Supplements
-                    .FindAsync(parsedGuid);
-
-                if (supplementToDelete != null)
-                {
-                    deleteViewmodel = new SupplementDeleteInputModel()
-                    {
-                        Id = supplementToDelete.Id.ToString(),
-                        Name = supplementToDelete.Name,
-                    };
-                }
-            }
-
-            return deleteViewmodel;
-        }
-
         public async Task<IEnumerable<AllSupplementsViewmodel>> GetAllSupplementsAsync()
         {
             IEnumerable<AllSupplementsViewmodel> supplements = await this.dbContext
@@ -62,7 +37,6 @@
             return supplements;
 
         }
-
         public async Task<DetailsSupplementViewmodel?> GetDetailsForSupplementAsync(string? id)
         {
             DetailsSupplementViewmodel? supplementDetails = null;
@@ -95,6 +69,30 @@
             return supplementDetails;
         }
 
+        public async Task<SupplementDeleteInputModel?> GetSupplementToDelete(string? supplementId)
+        {
+            SupplementDeleteInputModel? deleteViewmodel = null;
+
+            bool guidIsValid = Guid.TryParse(supplementId, out Guid parsedGuid);
+            if (supplementId != null)
+            {
+                Supplement? supplementToDelete = await this.dbContext
+                    .Supplements
+                    .FindAsync(parsedGuid);
+
+                if (supplementToDelete != null)
+                {
+                    deleteViewmodel = new SupplementDeleteInputModel()
+                    {
+                        Id = supplementToDelete.Id.ToString(),
+                        Name = supplementToDelete.Name,
+                    };
+                }
+            }
+
+            return deleteViewmodel;
+        }
+
         public async Task<Guid?> PersistAddSupplementAsync(AddSupplementInputModel inputModel)
         {
             Guid? newSupplementId = null;
@@ -124,29 +122,6 @@
             }
 
             return newSupplementId;
-        }
-
-        public async Task<bool> DeleteSupplement(SupplementDeleteInputModel inputModel)
-        {
-            bool taskResult = false;
-
-            bool guidIsValid = Guid.TryParse(inputModel.Id, out Guid parsedGuid);
-
-            if (inputModel != null && guidIsValid == true)
-            {
-                Supplement? supplementToDelete = await this.dbContext
-                    .Supplements
-                    .FindAsync(parsedGuid);
-
-                if (supplementToDelete != null)
-                {
-                    supplementToDelete.IsDeleted = true;
-                    await this.dbContext.SaveChangesAsync();
-                    taskResult = true;
-                }
-            }
-
-            return taskResult;
         }
 
         public async Task<SupplementEditInputModel?> GetSupplementForEditAsync(string? supplementId)
@@ -200,7 +175,7 @@
                     .Supplements
                     .FindAsync(parsedGuid);
 
-                if(supplementToEdit != null)
+                if (supplementToEdit != null)
                 {
                     supplementToEdit.Name = inputModel.Name;
                     supplementToEdit.Description = inputModel.Description;
@@ -216,6 +191,28 @@
                 }
             }
             return editedSupplementId;
+        }
+
+        public async Task<bool> DeleteSupplement(SupplementDeleteInputModel inputModel)
+        {
+            bool taskResult = false;
+
+            bool guidIsValid = Guid.TryParse(inputModel.Id, out Guid parsedGuid);
+
+            if (inputModel != null && guidIsValid == true)
+            {
+                Supplement? supplementToDelete = await this.dbContext
+                    .Supplements
+                    .FindAsync(parsedGuid);
+
+                if (supplementToDelete != null)
+                {
+                    supplementToDelete.IsDeleted = true;
+                    await this.dbContext.SaveChangesAsync();
+                    taskResult = true;
+                }
+            }
+            return taskResult;
         }
     }
 }

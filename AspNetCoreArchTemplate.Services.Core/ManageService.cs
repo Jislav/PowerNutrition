@@ -29,7 +29,7 @@
                     .Orders
                     .FindAsync(parsedGuid);
 
-                if(order != null)
+                if (order != null)
                 {
                     order.Status = OrderStatus.Approved;
                     approvedOrderId = order.Id;
@@ -38,27 +38,6 @@
             }
 
             return approvedOrderId;
-        }
-
-        public async Task<IEnumerable<AllSupplementsDeleteViewmodel>> GetAllSupplementsDeleteListAsync()
-        {
-            IEnumerable<AllSupplementsDeleteViewmodel> supplementsDeleteList = await this.dbContext
-               .Supplements
-               .Include(s => s.Category)
-               .AsNoTracking()
-               .Select(s => new AllSupplementsDeleteViewmodel()
-               {
-                   Id = s.Id.ToString(),
-                   Name = s.Name,
-                   Brand = s.Brand,
-                   ImageUrl = s.ImageUrl,
-                   Category = s.Category.Name,
-                   Price = s.Price.ToString("f2"),
-                   Quantity = s.Stock.ToString(),
-               })
-               .ToListAsync();
-
-            return supplementsDeleteList;
         }
 
         public async Task<IEnumerable<AllSupplemenetsEditViewmodel>> GetAllSupplementsEditListAsync()
@@ -74,7 +53,28 @@
                    Name = s.Name,
                    Brand = s.Brand,
                    ImageUrl = s.ImageUrl,
-                   Category = s.Category.Name,
+                   Category = s.Category!.Name,
+                   Price = s.Price.ToString("f2"),
+                   Quantity = s.Stock.ToString(),
+               })
+               .ToListAsync();
+
+            return supplementsDeleteList;
+        }
+
+        public async Task<IEnumerable<AllSupplementsDeleteViewmodel>> GetAllSupplementsDeleteListAsync()
+        {
+            IEnumerable<AllSupplementsDeleteViewmodel> supplementsDeleteList = await this.dbContext
+               .Supplements
+               .Include(s => s.Category)
+               .AsNoTracking()
+               .Select(s => new AllSupplementsDeleteViewmodel()
+               {
+                   Id = s.Id.ToString(),
+                   Name = s.Name,
+                   Brand = s.Brand,
+                   ImageUrl = s.ImageUrl,
+                   Category = s.Category!.Name,
                    Price = s.Price.ToString("f2"),
                    Quantity = s.Stock.ToString(),
                })

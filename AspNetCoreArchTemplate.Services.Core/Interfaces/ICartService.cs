@@ -4,7 +4,7 @@ namespace PowerNutrition.Services.Core.Interfaces
 {
     public interface ICartService
     {
-        Task<IEnumerable<AllCartItemsViewmodel?>> GetAllCartItemsAsync(string? userId);
+        Task<IEnumerable<AllCartItemsViewmodel>?> GetAllCartItemsAsync(string? userId);
 
         Task<bool> AddToCartAsync(string? userId, string? supplementId);
 

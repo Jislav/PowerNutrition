@@ -17,7 +17,7 @@ namespace PowerNutrition.Web.Controllers
         {
             string? userId = this.GetUserId();
 
-            IEnumerable<UserOrderHistoryViewmodel> userOrders = await this.orderService
+            IEnumerable<UserOrderHistoryViewmodel>? userOrders = await this.orderService
                 .GetUserOrderHistoryAsync(userId);
 
             return this.View(userOrders);

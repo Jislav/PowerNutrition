@@ -21,10 +21,10 @@
         {
             string? userId = this.GetUserId();
 
-            IEnumerable<AllCartItemsViewmodel?> cartItems = await this.cartService
+            IEnumerable<AllCartItemsViewmodel>? cartItems = await this.cartService
                 .GetAllCartItemsAsync(userId);
 
-            return View(cartItems);
+            return this.View(cartItems);
         }
         [HttpPost]
         public async Task<IActionResult> AddToCart(string? supplementId)

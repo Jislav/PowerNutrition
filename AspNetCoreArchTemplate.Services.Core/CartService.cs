@@ -17,6 +17,29 @@
             this.dbContext = dbContext;
         }
 
+        public async Task<IEnumerable<AllCartItemsViewmodel>?> GetAllCartItemsAsync(string? userId)
+        {
+            IEnumerable<AllCartItemsViewmodel>? userCartItems = null;
+
+            if (userId != null)
+            {
+                userCartItems = await this.dbContext
+                    .CartsItems
+                    .Include(ci => ci.Supplement)
+                    .Where(ci => ci.UserId.ToLower() == userId.ToLower())
+                    .Select(ci => new AllCartItemsViewmodel()
+                    {
+                        Id = ci.SupplementId.ToString(),
+                        Name = ci.Supplement.Name,
+                        Price = ci.Supplement.Price.ToString("f2"),
+                        Amount = ci.Quantity.ToString(),
+                        ImageUrl = ci.Supplement.ImageUrl,
+                    })
+                    .ToArrayAsync();
+            }
+
+            return userCartItems;
+        }
         public async Task<bool> AddToCartAsync(string? userId, string? supplementId)
         {
             if(userId != null && supplementId != null)
@@ -40,11 +63,14 @@
                     cartItem.Quantity++;
                 }
 
-                Supplement supplementToModify = await this.dbContext
+                Supplement? supplementToModify = await this.dbContext
                     .Supplements
                     .FirstOrDefaultAsync(s => s.Id.ToString().ToLower() == supplementId);
 
-                supplementToModify!.Stock--;
+                if(supplementToModify != null)
+                {
+                    supplementToModify!.Stock--;
+                }
 
                 await this.dbContext.SaveChangesAsync();
 
@@ -54,29 +80,6 @@
             return false;
         }
 
-        public async Task<IEnumerable<AllCartItemsViewmodel?>> GetAllCartItemsAsync(string? userId)
-        {
-            IEnumerable<AllCartItemsViewmodel?> userCartItems = null;
-
-            if (userId != null)
-            {
-                userCartItems = await this.dbContext
-                    .CartsItems
-                    .Include(ci => ci.Supplement)
-                    .Where(ci => ci.UserId.ToLower() == userId.ToLower())
-                    .Select(ci => new AllCartItemsViewmodel()
-                    {
-                        Id = ci.SupplementId.ToString(),
-                        Name = ci.Supplement.Name,
-                        Price = (ci.Supplement.Price * ci.Quantity).ToString("f2"),
-                        Amount = ci.Quantity.ToString(),
-                        ImageUrl = ci.Supplement.ImageUrl,
-                    })
-                    .ToArrayAsync();
-            }
-
-            return userCartItems;
-        }
 
         public async Task<bool> RemoveFromCartAsync(string? userId, string? supplementId)
         {
@@ -93,11 +96,14 @@
                     stockToRenew = cartItem.Quantity;
                     this.dbContext.Remove(cartItem);
 
-                    Supplement supplementToModify = await this.dbContext
+                    Supplement? supplementToModify = await this.dbContext
                         .Supplements
                         .FirstOrDefaultAsync(s => s.Id.ToString().ToLower() == supplementId);
 
-                    supplementToModify!.Stock += stockToRenew;
+                    if(supplementToModify != null)
+                    {
+                        supplementToModify!.Stock += stockToRenew;
+                    }
 
                     await this.dbContext.SaveChangesAsync();
 

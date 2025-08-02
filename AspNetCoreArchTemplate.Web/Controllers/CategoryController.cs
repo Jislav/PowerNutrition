@@ -52,7 +52,7 @@
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Delete(string? id)
         {
-            CategoryDeleteInputModel inputModel = await this.categoryService
+            CategoryDeleteInputModel? inputModel = await this.categoryService
                 .GetCategoryForDeletingAsync(id);
 
             return this.View(inputModel);

@@ -13,6 +13,20 @@
         {
             this.dbContext = dbContext;
         }
+        public async Task<ICollection<CategoriesListViewmodel>> GetAllCategoriesAsync()
+        {
+            ICollection<CategoriesListViewmodel> categories = await this.dbContext
+                .Categories
+                .Select(c => new CategoriesListViewmodel
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToListAsync();
+
+            return categories;
+
+        }
 
         public async Task<bool> AddCategoryAsync(AddCategoryInputModel inputModel)
         {
@@ -37,21 +51,6 @@
                 }
             }
             return taskResult;
-        }
-
-        public async Task<ICollection<CategoriesListViewmodel>> GetAllCategoriesAsync()
-        {
-            ICollection<CategoriesListViewmodel> categories = await this.dbContext
-                .Categories
-                .Select(c => new CategoriesListViewmodel
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
-                .ToListAsync();
-
-            return categories;
-
         }
 
         public async Task<CategoryDeleteInputModel?> GetCategoryForDeletingAsync(string? id)

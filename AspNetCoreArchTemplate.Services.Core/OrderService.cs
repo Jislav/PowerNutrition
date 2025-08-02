@@ -15,7 +15,7 @@
             this.dbContext = dbContext;
             this.userManager = userManager;
         }
-        public async Task<IEnumerable<OrdersWithStatusPendingViewmodel>>? GetAllOrdersWithStatusPendingAsync()
+        public async Task<IEnumerable<OrdersWithStatusPendingViewmodel>?> GetAllOrdersWithStatusPendingAsync()
         {
             IEnumerable<OrdersWithStatusPendingViewmodel>? pendingOrders = await this.dbContext
                 .Orders
@@ -44,13 +44,13 @@
             return pendingOrders;
         }
 
-        public async Task<OrderDetailsViewModel> GetOrderDetailsAsync(string? userId, string? orderId)
+        public async Task<OrderDetailsViewModel?> GetOrderDetailsAsync(string? userId, string? orderId)
         {
             OrderDetailsViewModel? orderDetails = null;
 
             if (userId != null && orderId != null)
             {
-                IdentityUser user = await userManager.FindByIdAsync(userId);
+                IdentityUser? user = await userManager.FindByIdAsync(userId);
 
                 Order? orderToDetailsToDisplay = await this.dbContext
                     .Orders
@@ -58,8 +58,8 @@
                     .ThenInclude(oi => oi.Supplement)
                     .FirstOrDefaultAsync(o => o.Id.ToString().ToLower() == orderId.ToLower());
 
-                if (orderToDetailsToDisplay != null && orderToDetailsToDisplay.UserId.ToString().ToLower() == userId.ToLower()
-                    || await this.userManager.IsInRoleAsync(user!, "Manager"))
+                if (orderToDetailsToDisplay != null && user != null && (orderToDetailsToDisplay.UserId.ToString().ToLower() == userId.ToLower()
+                    || await this.userManager.IsInRoleAsync(user!, "Manager")))
                 {
                     orderDetails = new OrderDetailsViewModel()
                     {
@@ -85,9 +85,9 @@
         }
 
 
-        public async Task<IEnumerable<UserOrderHistoryViewmodel>> GetUserOrderHistoryAsync(string? userId)
+        public async Task<IEnumerable<UserOrderHistoryViewmodel>?> GetUserOrderHistoryAsync(string? userId)
         {
-            IEnumerable<UserOrderHistoryViewmodel?> currentUserOrders = null;
+            IEnumerable<UserOrderHistoryViewmodel>? currentUserOrders = null;
 
             if (userId != null)
             {
