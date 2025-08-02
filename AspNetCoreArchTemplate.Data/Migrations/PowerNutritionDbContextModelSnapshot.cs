@@ -366,7 +366,7 @@ namespace PowerNutrition.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -590,8 +590,7 @@ namespace PowerNutrition.Data.Migrations
                     b.HasOne("PowerNutrition.Data.Models.Category", "Category")
                         .WithMany("Supplements")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Category");
                 });

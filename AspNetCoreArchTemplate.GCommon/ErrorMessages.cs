@@ -38,5 +38,11 @@
 
             public const string SupplementCategoryRequiredMessage = "Category field is required!";
         }
+
+        public static class CategoryInputModelMessages
+        {
+            public const string CategoryNameRequiredMessage = "Name field is required!";
+            public const string CategoryNameLengthMessage = "Name must be between 3 and 35 characters long!";
+        }
     }
 }

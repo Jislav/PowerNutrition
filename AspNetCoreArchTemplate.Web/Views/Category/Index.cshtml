@@ -1,0 +1,27 @@
+﻿@using PowerNutrition.Web.ViewModels.Category
+@model IEnumerable<CategoriesListViewmodel>
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<h1 style="font-size: 48px; text-align: center"> All Categories</h1>
+<div>
+    @foreach (var category in Model)
+    {
+        <div style="display:flex; align-items:center;padding: 10px; justify-content:space-between; margin-bottom:10px; border:2px solid black">
+            <p style="font-size:24px">
+                @category.Name
+            </p>
+            <form asp-action="Delete" asp-controller="Category" asp-route-id="@category.Id" method="get">
+                <button type="submit" class="btn btn-danger">
+                    Delete
+                </button>
+            </form>
+        </div>
+    }
+    <form asp-action="Add" asp-controller="Category" method="get" class="d-block" style="margin:0px auto; width:25%;">
+        <button type="submit" class="btn btn-success d-block" style="margin:0px auto">
+            Add Category
+        </button>
+    </form>
+</div>

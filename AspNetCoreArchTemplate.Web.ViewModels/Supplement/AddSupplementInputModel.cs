@@ -1,5 +1,6 @@
 ﻿namespace PowerNutrition.Web.ViewModels.Supplement
 {
+    using PowerNutrition.Web.ViewModels.Category;
     using System.ComponentModel.DataAnnotations;
     using static PowerNutrition.GCommon.ApplicationConstants.SupplementConstants;
     using static PowerNutrition.GCommon.ErrorMessages.SupplementInputModelMessages;
@@ -38,6 +39,6 @@
         [Required(ErrorMessage = SupplementCategoryRequiredMessage)]
         public int CategoryId { get; set; }
 
-        public ICollection<SupplementCategoryDropDownFilterViewmodel>? Categories { get; set; }
+        public ICollection<CategoriesListViewmodel>? Categories { get; set; }
     }
 }

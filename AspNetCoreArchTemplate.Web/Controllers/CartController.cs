@@ -55,7 +55,7 @@
                 //TODO: Redirect to custom error page
             }
 
-            return this.Redirect(nameof(Index));
+            return this.Redirect(nameof(MyCart));
         }
     }
 }

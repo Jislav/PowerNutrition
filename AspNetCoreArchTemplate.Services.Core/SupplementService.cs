@@ -52,7 +52,7 @@
                     Name = s.Name,
                     Brand = s.Brand,
                     ImageUrl = s.ImageUrl,
-                    Category = s.Category.Name,
+                    Category = s.Category!.Name,
                     Price = s.Price.ToString("f2"),
                     Quantity = s.Stock.ToString(),
                     Weigth = s.Weight.ToString()
@@ -83,7 +83,7 @@
                         Name = supplementToDisplay.Name,
                         Brand = supplementToDisplay.Brand,
                         ImageUrl = supplementToDisplay.ImageUrl,
-                        Category = supplementToDisplay.Category.Name,
+                        Category = supplementToDisplay.Category!.Name,
                         Price = supplementToDisplay.Price.ToString("f2"),
                         Quantity = supplementToDisplay.Stock.ToString(),
                         Description = supplementToDisplay.Description,
@@ -175,7 +175,7 @@
                             ImageUrl = supplement.ImageUrl,
                             Weigth = supplement.Weight,
                             Stock = supplement.Stock,
-                            CategoryId = supplement.CategoryId
+                            CategoryId = supplement.CategoryId!.Value
                         };
                     }
                 }

@@ -40,7 +40,7 @@
                 .HasOne(s => s.Category)
                 .WithMany(c => c.Supplements)
                 .HasForeignKey(s => s.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             entity
                 .Property(s => s.IsDeleted)

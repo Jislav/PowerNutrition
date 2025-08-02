@@ -63,7 +63,7 @@
                 {
                     orderDetails = new OrderDetailsViewModel()
                     {
-                        Address = orderToDetailsToDisplay.Address,
+                        Address = orderToDetailsToDisplay!.Address,
                         PhoneNumber = orderToDetailsToDisplay.PhoneNumber,
                         City = orderToDetailsToDisplay.City,
                         PostCode = orderToDetailsToDisplay.PostCode,
@@ -87,7 +87,7 @@
 
         public async Task<IEnumerable<UserOrderHistoryViewmodel>> GetUserOrderHistoryAsync(string? userId)
         {
-            IEnumerable<UserOrderHistoryViewmodel>? currentUserOrders = null;
+            IEnumerable<UserOrderHistoryViewmodel?> currentUserOrders = null;
 
             if (userId != null)
             {
