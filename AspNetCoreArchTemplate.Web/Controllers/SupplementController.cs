@@ -52,6 +52,7 @@
             {
                 Categories = categories
             };
+
             return this.View(inputModel);
         }
         [HttpPost]

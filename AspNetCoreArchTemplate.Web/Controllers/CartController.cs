@@ -34,11 +34,6 @@
             bool taskResult = await this.cartService
                 .AddToCartAsync(userId, supplementId);
 
-            if(taskResult == false)
-            {
-                //TODO: Redirect to custom error page
-            }
-
             return this.RedirectToAction("Index", "Supplement");
         }
         [HttpPost]
@@ -49,11 +44,6 @@
 
             bool taskResult = await this.cartService
                 .RemoveFromCartAsync(userId, supplementId);
-
-            if(taskResult == false)
-            {
-                //TODO: Redirect to custom error page
-            }
 
             return this.Redirect(nameof(MyCart));
         }

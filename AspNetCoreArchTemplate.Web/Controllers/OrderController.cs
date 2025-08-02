@@ -35,8 +35,6 @@ namespace PowerNutrition.Web.Controllers
             bool taskResult = await this.orderService
                 .PlaceOrderAsync(userId, input);
 
-            //TODO: Handle error with custom error page
-
             return this.RedirectToAction(nameof(OrderHistory));
         }
         [HttpGet]
