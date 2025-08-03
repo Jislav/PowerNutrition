@@ -23,11 +23,19 @@ namespace AspNetCoreArchTemplate.Web.Controllers
         public IActionResult Privacy()
         {
             return View();
-        }
-
+        }   
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(int? statusCode)
         {
+            if(statusCode == 404)
+            {
+                return this.View("NotFoundError");
+            }
+            else if(statusCode == 500)
+            {
+                return this.View("InternalServerError");
+            }
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

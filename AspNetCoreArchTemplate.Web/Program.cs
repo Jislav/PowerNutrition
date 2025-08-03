@@ -38,6 +38,7 @@ namespace PowerNutrition.Web
             builder.Services.AddScoped<IdentitySeeder>();
             builder.Services.AddControllersWithViews();
 
+
             WebApplication? app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -54,6 +55,8 @@ namespace PowerNutrition.Web
                 var seeder = scope.ServiceProvider.GetRequiredService<IdentitySeeder>();
                 await seeder.SeedRolesAndDefaultManager();
             }
+            app.UseStatusCodePagesWithRedirects("/Home/Error?statusCode={0}");
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
