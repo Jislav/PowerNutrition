@@ -5,8 +5,10 @@ namespace PowerNutrition.Web
     using PowerNutrition.Data;
     using PowerNutrition.Data.Models;
     using PowerNutrition.Data.Seeding;
+    using PowerNutrition.Data.Seeding.Interfaces;
     using PowerNutrition.Services.Core;
     using PowerNutrition.Services.Core.Interfaces;
+    using PowerNutrition.Web.Infrastructure;
 
     public class Program
     {
@@ -35,11 +37,13 @@ namespace PowerNutrition.Web
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
-            builder.Services.AddScoped<IdentitySeeder>();
+            builder.Services.AddTransient<IIdentitySeeder, IdentitySeeder>();
             builder.Services.AddControllersWithViews();
 
 
             WebApplication? app = builder.Build();
+
+            app.SeedDefaultIdentity();
 
             if (app.Environment.IsDevelopment())
             {
@@ -50,11 +54,7 @@ namespace PowerNutrition.Web
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-            using (var scope = app.Services.CreateScope())
-            {
-                var seeder = scope.ServiceProvider.GetRequiredService<IdentitySeeder>();
-                await seeder.SeedRolesAndDefaultManager();
-            }
+  
             app.UseStatusCodePagesWithRedirects("/Home/Error?statusCode={0}");
 
             app.UseHttpsRedirection();

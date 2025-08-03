@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using PowerNutrition.Data.Models;
+using PowerNutrition.Data.Seeding.Interfaces;
 
 namespace PowerNutrition.Data.Seeding
 {
-    public class IdentitySeeder
+    public class IdentitySeeder : IIdentitySeeder
     {
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<IdentityUser> userManager;
