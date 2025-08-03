@@ -107,5 +107,16 @@
 
             return taskResult;
         }
+
+        public async Task<bool> CheckIfCategoryExists(int? id)
+        {
+            if(!id.HasValue)
+            {
+                return false;
+            }
+            return await this.dbContext
+                .Categories
+                .AnyAsync(c => c.Id == id.Value);
+        }
     }
 }

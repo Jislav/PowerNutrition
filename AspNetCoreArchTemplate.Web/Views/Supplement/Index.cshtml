@@ -1,13 +1,33 @@
 ﻿@using PowerNutrition.Web.ViewModels.Supplement;
-@model IEnumerable<AllSupplementsViewmodel>
+@model SupplementsPageViewModel;
 @{
     ViewData["Title"] = "Supplements";
 }
+@if(string.IsNullOrEmpty(Model.CategoryName))
+{
+    <h2 style="text-align:center">All Supplements</h2>
+}
+else
+{
+    <h2 style="text-align:center">All @Model.CategoryName Supplements</h2>
+}
 
-<h2>All Supplements</h2>
 
-<div style="display:flex; flex-direction: row; gap: 10px; flex-wrap: wrap">
-    @foreach (var supplement in Model)
+<form method="get">
+    <div class="form-group">
+        <label asp-for="CategoryId">Filter by category</label>
+        <select asp-for="CategoryId"
+            name="categoryFilter"
+                asp-items="@(new SelectList(Model.Categories, "Id", "Name"))"
+                class="form-control">
+            <option value="">All</option>
+        </select>
+        <button type="submit" class="btn btn-primary" style="margin-top:20px">Filter</button>
+    </div>
+</form>
+
+<div style="display:flex; flex-direction: row; gap: 5px; flex-wrap: wrap; justify-content:flex-start;">
+    @foreach (var supplement in Model.Supplements)
     {
         <div style="margin:15px 15px; border:2px solid black; padding:10px">
             <img height="300" width="300" src="@supplement.ImageUrl"/>

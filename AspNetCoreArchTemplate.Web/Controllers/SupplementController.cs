@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using PowerNutrition.Services.Core;
     using PowerNutrition.Services.Core.Interfaces;
     using PowerNutrition.Web.ViewModels.Category;
     using PowerNutrition.Web.ViewModels.Supplement;
@@ -18,12 +17,27 @@
         }
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? categoryFilter)
         {
-            IEnumerable<AllSupplementsViewmodel> allSupplements = await this.supplementService
-                .GetAllSupplementsAsync();
+            if (categoryFilter.HasValue)
+            {
+                bool categoryExists = await this.categoryService
+                    .CheckIfCategoryExists(categoryFilter);
 
-            return View(allSupplements);
+                if (categoryExists == false)
+                {
+                    return this.RedirectToAction(nameof(Index));
+                }
+            }
+          
+            SupplementsPageViewModel allSupplements = await this.supplementService
+                     .GetAllSupplementsAsync(categoryFilter);
+
+            allSupplements.Categories = await this.categoryService
+              .GetAllCategoriesAsync();
+
+            return this.View(allSupplements);
+
         }
 
         [HttpGet]
@@ -123,7 +137,7 @@
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(SupplementEditInputModel inputModel)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 inputModel.Categories = await this.categoryService
                .GetAllCategoriesAsync();
@@ -134,7 +148,7 @@
             Guid? editedSupplementId = await this.supplementService
                 .PersistEditSupplementAsync(inputModel);
 
-            if(editedSupplementId == null)
+            if (editedSupplementId == null)
             {
                 inputModel.Categories = await this.categoryService
                 .GetAllCategoriesAsync();

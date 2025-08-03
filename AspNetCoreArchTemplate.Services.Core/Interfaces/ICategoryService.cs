@@ -14,5 +14,7 @@ namespace PowerNutrition.Services.Core.Interfaces
         Task<CategoryDeleteInputModel?> GetCategoryForDeletingAsync(string? id);
 
         Task<bool> PersistCategoryDelete(CategoryDeleteInputModel inputModel);
+
+        Task<bool> CheckIfCategoryExists(int? id);
     }
 }

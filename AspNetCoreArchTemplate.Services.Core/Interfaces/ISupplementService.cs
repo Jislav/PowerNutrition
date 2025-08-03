@@ -3,7 +3,7 @@
     using PowerNutrition.Web.ViewModels.Supplement;
     public interface ISupplementService
     {
-        Task<IEnumerable<AllSupplementsViewmodel>> GetAllSupplementsAsync();
+        Task<SupplementsPageViewModel> GetAllSupplementsAsync(int? categoryFilter);
 
         Task<DetailsSupplementViewmodel?> GetDetailsForSupplementAsync(string? id);
 

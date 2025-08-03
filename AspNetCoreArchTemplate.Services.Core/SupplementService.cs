@@ -15,9 +15,13 @@
         {
             this.dbContext = dbContext;
         }
-        public async Task<IEnumerable<AllSupplementsViewmodel>> GetAllSupplementsAsync()
+        public async Task<SupplementsPageViewModel> GetAllSupplementsAsync(int? categoryFilter)
         {
-            IEnumerable<AllSupplementsViewmodel> supplements = await this.dbContext
+            SupplementsPageViewModel? supplementsViewmodel = null;
+
+            supplementsViewmodel = new SupplementsPageViewModel()
+            {
+                Supplements = await this.dbContext
                 .Supplements
                 .Include(s => s.Category)
                 .AsNoTracking()
@@ -32,9 +36,25 @@
                     Quantity = s.Stock.ToString(),
                     Weigth = s.Weight.ToString()
                 })
-                .ToListAsync();
+                .ToListAsync()
+            };
 
-            return supplements;
+            if(categoryFilter != null)
+            {
+                Category? categoryRef = await this.dbContext
+                    .Categories
+                    .FirstOrDefaultAsync(c => c.Id == categoryFilter);
+
+                if(categoryRef != null)
+                {
+                    supplementsViewmodel.Supplements = supplementsViewmodel.Supplements.Where(s => s.Category.ToLower() == categoryRef.Name.ToLower());
+                    supplementsViewmodel.CategoryName = categoryRef.Name;
+                }
+               
+
+            }
+
+            return supplementsViewmodel;
 
         }
         public async Task<DetailsSupplementViewmodel?> GetDetailsForSupplementAsync(string? id)
