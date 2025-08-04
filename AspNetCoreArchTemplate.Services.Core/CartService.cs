@@ -42,42 +42,45 @@
         }
         public async Task<bool> AddToCartAsync(string? userId, string? supplementId)
         {
-            if(userId != null && supplementId != null)
+            bool taskResult = false;
+
+            if (userId != null && supplementId != null)
             {
-                CartItem? cartItem = await this.dbContext
-                    .CartsItems
-                    .FirstOrDefaultAsync(ci => userId.ToLower() == ci.UserId.ToLower() && ci.SupplementId.ToString().ToLower() == supplementId.ToLower());
-
-                if(cartItem == null)
-                {
-                    CartItem newCartItem = new CartItem()
-                    {
-                        UserId = userId,
-                        SupplementId = Guid.Parse(supplementId)
-                    };
-
-                    await this.dbContext.AddAsync(newCartItem);
-                }
-                else
-                {
-                    cartItem.Quantity++;
-                }
-
                 Supplement? supplementToModify = await this.dbContext
-                    .Supplements
-                    .FirstOrDefaultAsync(s => s.Id.ToString().ToLower() == supplementId);
+                 .Supplements
+                 .FirstOrDefaultAsync(s => s.Id.ToString().ToLower() == supplementId);
 
-                if(supplementToModify != null)
+                if (supplementToModify != null && supplementToModify.Stock > 0)
                 {
+
+                    CartItem? cartItem = await this.dbContext
+                        .CartsItems
+                        .FirstOrDefaultAsync(ci => userId.ToLower() == ci.UserId.ToLower() && ci.SupplementId.ToString().ToLower() == supplementId.ToLower());
+
+                    if (cartItem == null)
+                    {
+                        CartItem newCartItem = new CartItem()
+                        {
+                            UserId = userId,
+                            SupplementId = Guid.Parse(supplementId)
+                        };
+
+                        await this.dbContext.AddAsync(newCartItem);
+                    }
+                    else
+                    {
+                        cartItem.Quantity++;
+                    }
+
                     supplementToModify!.Stock--;
+
+                    await this.dbContext.SaveChangesAsync();
+
+                    taskResult = true;
                 }
-
-                await this.dbContext.SaveChangesAsync();
-
-                return true;
             }
 
-            return false;
+            return taskResult;
         }
 
 
@@ -85,7 +88,7 @@
         {
             int stockToRenew = 0;
 
-            if(userId != null && supplementId != null)
+            if (userId != null && supplementId != null)
             {
                 CartItem? cartItem = await this.dbContext
                     .CartsItems
@@ -100,7 +103,7 @@
                         .Supplements
                         .FirstOrDefaultAsync(s => s.Id.ToString().ToLower() == supplementId);
 
-                    if(supplementToModify != null)
+                    if (supplementToModify != null)
                     {
                         supplementToModify!.Stock += stockToRenew;
                     }

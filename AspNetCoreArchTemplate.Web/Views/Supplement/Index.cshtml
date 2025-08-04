@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Supplements";
 }
-@if(string.IsNullOrEmpty(Model.CategoryName))
+@if (string.IsNullOrEmpty(Model.CategoryName))
 {
     <h2 style="text-align:center">All Supplements</h2>
 }
@@ -17,7 +17,7 @@ else
     <div class="form-group">
         <label asp-for="CategoryId">Filter by category</label>
         <select asp-for="CategoryId"
-            name="categoryFilter"
+                name="categoryFilter"
                 asp-items="@(new SelectList(Model.Categories, "Id", "Name"))"
                 class="form-control">
             <option value="">All</option>
@@ -30,12 +30,21 @@ else
     @foreach (var supplement in Model.Supplements)
     {
         <div style="margin:15px 15px; border:2px solid black; padding:10px">
-            <img height="300" width="300" src="@supplement.ImageUrl"/>
+            <img height="300" width="300" src="@supplement.ImageUrl" />
             <h3>@supplement.Name</h3>
             <p>Brand: @supplement.Brand</p>
             <p>Type: @supplement.Category</p>
             <p>Price: @supplement.Price $</p>
-            <p>Quantity: @supplement.Quantity</p>
+
+            @if (int.Parse(supplement.Quantity) > 0)
+            {
+                <p>Quantity: @supplement.Quantity</p>
+            }
+            else
+            {
+                <p style="color: red"> Out of stock!</p>
+            }
+
             <p>Weight: @supplement.Weigth kg</p>
             <div>
                 <a asp-controller="Supplement" asp-action="Details" asp-route-id="@supplement.Id">
@@ -43,13 +52,15 @@ else
                         Details
                     </p>
                 </a>
-
-                <form asp-controller="Cart" asp-action="AddToCart" method="post" class="flex-1">
-                    <input type="hidden" name="supplementId" value="@supplement.Id" />
-                    <button type="submit" class="btn btn-success">
-                        Add to Cart
-                    </button>
-                </form>
+                @if (int.Parse(supplement.Quantity) > 0)
+                {
+                    <form asp-controller="Cart" asp-action="AddToCart" method="post" class="flex-1">
+                        <input type="hidden" name="supplementId" value="@supplement.Id" />
+                        <button type="submit" class="btn btn-success">
+                            Add to Cart
+                        </button>
+                    </form>
+                }
             </div>
         </div>
     }

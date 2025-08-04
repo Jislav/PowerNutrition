@@ -29,7 +29,7 @@
                     return this.RedirectToAction(nameof(Index));
                 }
             }
-          
+
             SupplementsPageViewModel allSupplements = await this.supplementService
                      .GetAllSupplementsAsync(categoryFilter);
 
@@ -37,7 +37,6 @@
               .GetAllCategoriesAsync();
 
             return this.View(allSupplements);
-
         }
 
         [HttpGet]
@@ -45,22 +44,23 @@
         public async Task<IActionResult> Details(string? id)
         {
             DetailsSupplementViewmodel? supplement = await this.supplementService
-                .GetDetailsForSupplementAsync(id);
+           .GetDetailsForSupplementAsync(id);
 
             if (supplement != null)
             {
                 return this.View(supplement);
             }
 
-            return this.RedirectToAction(nameof(Index));
+            return this.RedirectToAction("Error", "Home", new { statusCode = 404 });
         }
 
         [HttpGet]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Add()
         {
+
             ICollection<CategoriesListViewmodel> categories = await this.categoryService
-                .GetAllCategoriesAsync();
+           .GetAllCategoriesAsync();
 
             AddSupplementInputModel inputModel = new AddSupplementInputModel()
             {
@@ -68,95 +68,140 @@
             };
 
             return this.View(inputModel);
+
         }
         [HttpPost]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Add(AddSupplementInputModel inputModel)
         {
-            if (!ModelState.IsValid)
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    inputModel.Categories = await this.categoryService.GetAllCategoriesAsync();
+                    return this.View(inputModel);
+                }
+
+                Guid? supplementId = await this.supplementService.PersistAddSupplementAsync(inputModel);
+
+                if (supplementId == null)
+                {
+                    inputModel.Categories = await this.categoryService.GetAllCategoriesAsync();
+                    return this.View(inputModel);
+                }
+                return this.RedirectToAction(nameof(Details), controllerName: "Supplement", new { id = supplementId });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
                 inputModel.Categories = await this.categoryService.GetAllCategoriesAsync();
                 return this.View(inputModel);
             }
-
-            Guid? supplementId = await this.supplementService.PersistAddSupplementAsync(inputModel);
-
-            if (supplementId == null)
-            {
-                inputModel.Categories = await this.categoryService.GetAllCategoriesAsync();
-                return this.View(inputModel);
-            }
-            return this.RedirectToAction(nameof(Details), controllerName: "Supplement", new { id = supplementId });
         }
 
         [HttpGet]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Delete(string? supplementId)
         {
-            SupplementDeleteInputModel? inputModel = await this.supplementService
-                .GetSupplementToDelete(supplementId);
-
-            if (inputModel != null)
+            try
             {
-                return this.View(inputModel);
+                SupplementDeleteInputModel? inputModel = await this.supplementService
+               .GetSupplementToDelete(supplementId);
+
+                if (inputModel != null)
+                {
+                    return this.View(inputModel);
+                }
+
+                return this.RedirectToAction("Error", "Home", new { statusCode = 404 });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+                return this.RedirectToAction("Error", "Home", new { statusCode = 500 });
             }
 
-            return this.RedirectToAction("Delete", "Manage");
         }
         [HttpPost]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Delete(SupplementDeleteInputModel inputModel)
         {
-            bool taskResult = await this.supplementService
+            try
+            {
+                bool taskResult = await this.supplementService
                 .DeleteSupplement(inputModel);
 
-            if (taskResult == false)
+                if (taskResult == false)
+                {
+                    return this.RedirectToAction("Index", "Home");
+                }
+
+                return this.RedirectToAction("Delete", "Manage");
+            }
+            catch (Exception ex)
             {
-                //TODO: Handle notifications pop up or something else
-                return this.RedirectToAction("Index", "Home");
+                Console.WriteLine(ex.Message);
+
+                return this.RedirectToAction("Error", "Home", new { statusCode = 500 });
             }
 
-            return this.RedirectToAction("Delete", "Manage");
         }
 
         [HttpGet]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(string? supplementId)
         {
-            SupplementEditInputModel? supplementViewmodel = await this.supplementService
-                .GetSupplementForEditAsync(supplementId);
-
-            if (supplementViewmodel != null)
+            try
             {
-                supplementViewmodel.Categories = await this.categoryService
-                .GetAllCategoriesAsync();
+                SupplementEditInputModel? supplementViewmodel = await this.supplementService
+                    .GetSupplementForEditAsync(supplementId);
+
+                if (supplementViewmodel != null)
+                {
+                    supplementViewmodel.Categories = await this.categoryService
+                    .GetAllCategoriesAsync();
+
+                    return this.View(supplementViewmodel);
+                }
+                return this.RedirectToAction("Error", "Home", new { statusCode = 404 });
             }
-            return this.View(supplementViewmodel);
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+                return this.RedirectToAction("Error", "Home", new { statusCode = 500 });
+            }
+
         }
         [HttpPost]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Edit(SupplementEditInputModel inputModel)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                inputModel.Categories = await this.categoryService
-               .GetAllCategoriesAsync();
+                if (!ModelState.IsValid)
+                {
+                    inputModel.Categories = await this.categoryService
+                        .GetAllCategoriesAsync();
 
-                return this.View(inputModel);
+                    return this.View(inputModel);
+                }
+
+                Guid? editedSupplementId = await this.supplementService
+                    .PersistEditSupplementAsync(inputModel);
+
+                if (editedSupplementId == null)
+                {
+                    return this.RedirectToAction("Error", "Home", new { statusCode = 404 });
+                }
+                return this.RedirectToAction(nameof(Details), new { id = editedSupplementId });
             }
-
-            Guid? editedSupplementId = await this.supplementService
-                .PersistEditSupplementAsync(inputModel);
-
-            if (editedSupplementId == null)
+            catch (Exception ex)
             {
-                inputModel.Categories = await this.categoryService
-                .GetAllCategoriesAsync();
-
-                return this.View(inputModel);
-
+                Console.WriteLine(ex.Message);
+                return this.RedirectToAction("Error", "Home", new {statusCode = 500});
             }
-            return this.RedirectToAction(nameof(Details), new { id = editedSupplementId });
         }
     }
 }
