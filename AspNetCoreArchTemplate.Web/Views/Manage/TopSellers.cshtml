@@ -1,0 +1,30 @@
+﻿@using PowerNutrition.Web.ViewModels.Manage;
+@model IEnumerable<TopSellersViewmodel>
+@{
+    string[] borderColors = new string[]
+            { "#FFD700",
+              "#C0C0C0",
+              "#CD7F32"
+            };
+}
+
+<h1 style="text-align: center; font-size:48px">Top 3 Sellers</h1>
+
+@foreach (var item in Model.Select((supplement, index) => new { supplement, index }))
+{
+    <div style="width: 100%; display: flex; justify-content:space-between; gap: 10px; align-items: center; padding:20px; margin-bottom:20px; border:4px solid @borderColors[item.index]">
+        <img width="100" height="100" src="@item.supplement.ImageUrl" />
+        <p style="flex: 1">
+            Name: @item.supplement.Name
+        </p>
+        <p style="flex: 1">
+            Price: @item.supplement.Price $
+        </p>
+        <p style="flex: 1">
+            Sales: @item.supplement.SalesCount
+        </p>
+        <p style="flex: 1">
+            Total Profit: @item.supplement.TotalProfit.ToString("f2") $
+        </p>
+    </div>
+}

@@ -4,8 +4,9 @@
     using PowerNutrition.Data;
     using PowerNutrition.Data.Models;
     using PowerNutrition.Services.Core.Interfaces;
+    using PowerNutrition.Web.ViewModels.Manage;
     using PowerNutrition.Web.ViewModels.Supplement;
-    using System.Diagnostics;
+    using PowerNutrition.Data.Models.Enums;
 
     public class SupplementService : ISupplementService
     {
@@ -39,18 +40,18 @@
                 .ToListAsync()
             };
 
-            if(categoryFilter != null)
+            if (categoryFilter != null)
             {
                 Category? categoryRef = await this.dbContext
                     .Categories
                     .FirstOrDefaultAsync(c => c.Id == categoryFilter);
 
-                if(categoryRef != null)
+                if (categoryRef != null)
                 {
                     supplementsViewmodel.Supplements = supplementsViewmodel.Supplements.Where(s => s.Category.ToLower() == categoryRef.Name.ToLower());
                     supplementsViewmodel.CategoryName = categoryRef.Name;
                 }
-               
+
 
             }
 
@@ -233,6 +234,29 @@
                 }
             }
             return taskResult;
+        }
+        public async Task<IEnumerable<TopSellersViewmodel>> GetTopSellersAsync()
+        {
+            IEnumerable<TopSellersViewmodel> topSellers = await this.dbContext
+                .Supplements
+                .Include(s => s.Orders)
+                .ThenInclude(oi => oi.Order)
+                .Select(s => new TopSellersViewmodel()
+                {
+                    Id = s.Id.ToString(),
+                    Name = s.Name,
+                    ImageUrl = s.ImageUrl,
+                    SalesCount = s.Orders.Count(o => o.Order.Status == OrderStatus.Approved),
+                    Price = s.Price,
+                    TotalProfit = s.Price * s.Orders.Count(o => o.Order.Status == OrderStatus.Approved)
+                })
+                .OrderByDescending(s => s.TotalProfit)
+                .ThenByDescending(s => s.Price)
+                .Where(s => s.SalesCount > 0)
+                .Take(3)
+                .ToArrayAsync();
+
+            return topSellers;
         }
     }
 }

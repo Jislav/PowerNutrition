@@ -9,6 +9,5 @@ namespace PowerNutrition.Services.Core.Interfaces
         Task<IEnumerable<AllSupplemenetsEditViewmodel>> GetAllSupplementsEditListAsync();
 
         Task<Guid?> ApproveOrderAsync(string? orderId);
-
     }
 }

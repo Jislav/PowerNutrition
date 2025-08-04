@@ -12,11 +12,14 @@
     {
         private readonly IManageService manageService;
         private readonly IOrderService orderService;
+        private readonly ISupplementService supplementService;
 
-        public ManageController(IManageService manageService, IOrderService orderService)
+        public ManageController(IManageService manageService, IOrderService orderService,
+            ISupplementService supplementService)
         {
             this.manageService = manageService;
             this.orderService = orderService;
+            this.supplementService = supplementService;
         }
         [HttpGet]
         public IActionResult Index()
@@ -63,6 +66,15 @@
             }
 
             return this.RedirectToAction(nameof(Orders));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> TopSellers()
+        {
+            IEnumerable<TopSellersViewmodel> topSellers = await this.supplementService
+                .GetTopSellersAsync();
+
+            return this.View(topSellers);
         }
     }
 }

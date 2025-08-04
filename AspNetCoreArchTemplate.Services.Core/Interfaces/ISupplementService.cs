@@ -1,5 +1,6 @@
 ﻿namespace PowerNutrition.Services.Core.Interfaces
 {
+    using PowerNutrition.Web.ViewModels.Manage;
     using PowerNutrition.Web.ViewModels.Supplement;
     public interface ISupplementService
     {
@@ -16,5 +17,7 @@
         Task<SupplementEditInputModel?> GetSupplementForEditAsync(string? supplementId);
 
         Task<Guid?> PersistEditSupplementAsync(SupplementEditInputModel inputModel);
+
+        Task<IEnumerable<TopSellersViewmodel>> GetTopSellersAsync();
     }
 }
