@@ -1,6 +1,7 @@
 namespace PowerNutrition.Web
 {
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using PowerNutrition.Data;
     using PowerNutrition.Data.Models;
@@ -38,8 +39,11 @@ namespace PowerNutrition.Web
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddTransient<IIdentitySeeder, IdentitySeeder>();
-            builder.Services.AddControllersWithViews();
 
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
 
             WebApplication? app = builder.Build();
 

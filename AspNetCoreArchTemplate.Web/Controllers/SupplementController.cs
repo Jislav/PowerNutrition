@@ -60,7 +60,7 @@
         {
 
             ICollection<CategoriesListViewmodel> categories = await this.categoryService
-           .GetAllCategoriesAsync();
+                    .GetAllCategoriesAsync();
 
             AddSupplementInputModel inputModel = new AddSupplementInputModel()
             {
