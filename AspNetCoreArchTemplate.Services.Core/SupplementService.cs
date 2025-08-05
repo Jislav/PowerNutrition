@@ -95,6 +95,7 @@
             SupplementDeleteInputModel? deleteViewmodel = null;
 
             bool guidIsValid = Guid.TryParse(supplementId, out Guid parsedGuid);
+
             if (supplementId != null)
             {
                 Supplement? supplementToDelete = await this.dbContext

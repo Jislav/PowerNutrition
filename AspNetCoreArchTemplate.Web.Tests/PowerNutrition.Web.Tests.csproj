@@ -18,6 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Data.Models\PowerNutrition.Data.Models.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Data\PowerNutrition.Data.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.GCommon\PowerNutrition.GCommon.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Services.Common\PowerNutrition.Services.Common.csproj" />
+    <ProjectReference Include="..\AspNetCoreArchTemplate.Services.Core\PowerNutrition.Services.Core.csproj" />
     <ProjectReference Include="..\AspNetCoreArchTemplate.Web\PowerNutrition.Web.csproj" />
   </ItemGroup>
 
