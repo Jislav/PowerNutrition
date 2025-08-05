@@ -13,7 +13,7 @@ namespace PowerNutrition.Web
 
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
