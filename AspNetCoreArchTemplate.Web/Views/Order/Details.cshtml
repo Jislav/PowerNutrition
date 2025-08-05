@@ -37,7 +37,7 @@
                     Price: @itemDetails.Price $
                 </p>
                 @{
-                    totalOrderPrice += decimal.Parse(itemDetails.Price);
+                    totalOrderPrice += decimal.Parse(itemDetails.Price) * int.Parse(itemDetails.Quantity);
                 }
             </div>
         }

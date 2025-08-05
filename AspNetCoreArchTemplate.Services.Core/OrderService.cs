@@ -73,7 +73,7 @@
                           {
                               Name = oi.Supplement.Name,
                               Quantity = oi.Quantity.ToString(),
-                              Price = (oi.Quantity * oi.Supplement.Price).ToString("f2"),
+                              Price = oi.Supplement.Price.ToString("f2"),
                               ImageUrl = oi.Supplement.ImageUrl
                           })
                           .ToArray()
