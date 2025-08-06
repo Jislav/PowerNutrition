@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using PowerNutrition.Data;
 namespace PowerNutrition.Web
 {
     using Microsoft.AspNetCore.Identity;
