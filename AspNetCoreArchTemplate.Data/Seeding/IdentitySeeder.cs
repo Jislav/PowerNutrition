@@ -19,7 +19,7 @@ namespace PowerNutrition.Data.Seeding
         public async Task SeedRolesAndDefaultManager()
         {
             await this.SeedRolesAsync();
-            await this.SeedDefaultManagerAsync();
+            await this.SeedDefaultManagerAndUserAsync();
         }
         
         private async Task SeedRolesAsync()
@@ -42,14 +42,14 @@ namespace PowerNutrition.Data.Seeding
             }
         }
 
-        private async Task SeedDefaultManagerAsync()
+        private async Task SeedDefaultManagerAndUserAsync()
         {
             string managerEmail = "manager@powernutrition.com";
             string managerPassword = "123456Aa-";
 
             IdentityUser? managerSeeded = await this.userManager.FindByEmailAsync(managerEmail);
 
-            if(managerSeeded == null)
+            if (managerSeeded == null)
             {
                 IdentityUser manager = new IdentityUser()
                 {
@@ -59,6 +59,24 @@ namespace PowerNutrition.Data.Seeding
 
                 await this.userManager.CreateAsync(manager, managerPassword);
                 await this.userManager.AddToRoleAsync(manager, "Manager");
+            }
+
+
+            string defaultUserEmail = "defaultuser@abv.com";
+            string defaultUserPassword = "123456Aa-";
+
+            IdentityUser? userSeeded = await this.userManager.FindByEmailAsync(defaultUserEmail);
+
+            if (userSeeded == null)
+            {
+                IdentityUser defaultUser = new IdentityUser()
+                {
+                    UserName = defaultUserEmail,
+                    Email = defaultUserEmail
+                };
+
+                await this.userManager.CreateAsync(defaultUser, defaultUserPassword);
+                await this.userManager.AddToRoleAsync(defaultUser, "User");
             }
         }
     }
