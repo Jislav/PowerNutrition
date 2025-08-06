@@ -26,7 +26,7 @@
         public async Task SetUp()
         {
             DbContextOptions<PowerNutritionDbContext> options = new DbContextOptionsBuilder<PowerNutritionDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .UseInMemoryDatabase(databaseName: "OrderTestDb")
                 .Options;
 
             dbContext = new PowerNutritionDbContext(options);

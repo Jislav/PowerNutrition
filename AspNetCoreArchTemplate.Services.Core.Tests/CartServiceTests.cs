@@ -1,4 +1,4 @@
-﻿namespace PowerNutrition.Tests.Services
+﻿namespace PowerNutrition.Services.Core.Tests
 {
     using Microsoft.EntityFrameworkCore;
     using PowerNutrition.Data;
