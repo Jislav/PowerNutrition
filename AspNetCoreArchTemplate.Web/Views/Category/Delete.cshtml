@@ -5,20 +5,20 @@
 }
 <h2 style="font-size: 48px; text-align:center">Confirm Delete</h2>
 
-<div style="border:4px solid red">
-    <p style="font-size:24px">
+<div style="border:4px solid red; width: 50%; margin: 10px auto">
+    <p style="font-size:24px; text-align: center">
         Are you sure you want to delete @Model.Name?
     </p>
-    <div>
-        <a asp-page="/Category/Delete" class="btn btn-secondary">Cancel</a>
+    <div style="display:flex; flex: 1; justify-content: space-between; padding:5px">
+        <a asp-controller="Category" asp-action="Index" class="btn btn-secondary">Cancel</a>
 
-        <form style="flex: 1" asp-controller="Category" asp-action="Delete" method="post">
+        <form asp-controller="Category" asp-action="Delete" method="post">
             <input asp-for="Id" type="hidden" />
             <input asp-for="Name" type="hidden" />
             <button type="submit" class="btn btn-danger">Confirm</button>
         </form>
     </div>
-    <p>
+    <p style="text-align: center; color:red">
         NOTE: Every supplement from this category will also be deleted
     </p>
 </div>

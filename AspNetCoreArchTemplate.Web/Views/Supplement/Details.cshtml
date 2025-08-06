@@ -4,12 +4,12 @@
     ViewData["Title"] = @Model.Name;
 }
 
-<h2>@Model.Name</h2>
+<h2 style="text-align: center">@Model.Name</h2>
 
-<div>
+<div style="border: 2px solid black; padding: 20px; margin:20px auto;width: 40%; height: auto">
     <img style="height: 300px; width: 300px" src="@Model.ImageUrl" />
     <p>Brand: @Model.Brand</p>
-    <p>Price: @Model.Price</p>
+    <p>Price: @Model.Price $</p>
     <p>In stock: @Model.Quantity left</p>
     <p>Type: @Model.Category</p>
     <p>Description: @Model.Description</p>
