@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PowerNutrition.Data;
-using PowerNutrition.Data.Models;
-using PowerNutrition.Services.Core;
-using PowerNutrition.Web.ViewModels.Cart;
-
-namespace PowerNutrition.Tests.Services
+﻿namespace PowerNutrition.Tests.Services
 {
+    using Microsoft.EntityFrameworkCore;
+    using PowerNutrition.Data;
+    using PowerNutrition.Data.Models;
+    using PowerNutrition.Services.Core;
+    using PowerNutrition.Web.ViewModels.Cart;
+
     [TestFixture]
     public class CartServiceTests
     {
